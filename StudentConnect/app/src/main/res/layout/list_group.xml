@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Used in activity_hobbies_register_page.xml, used for the expandable list view -->
+<!-- Refers to the main category of hobbies i.e. Games and Sports -->
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"

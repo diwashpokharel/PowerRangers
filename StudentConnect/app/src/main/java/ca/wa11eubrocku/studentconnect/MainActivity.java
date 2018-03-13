@@ -1,12 +1,11 @@
 package ca.wa11eubrocku.studentconnect;
-//http://wptrafficanalyzer.in/blog/deleting-selected-items-from-listview-in-android/
-//used above for list view of courses (courses fragment page)
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+//This class just used to test the pages. THIS IS TO BE DELETED*******************
 
 public class MainActivity extends AppCompatActivity {
 

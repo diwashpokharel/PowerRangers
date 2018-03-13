@@ -9,6 +9,10 @@ import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.widget.DatePicker;
 
+/**
+ * This class is used for the Date picker in the Event pop up window, not working properly still
+ * fixing bugs.**************************************
+ */
 public class DatePickerFragment extends DialogFragment
         implements DatePickerDialog.OnDateSetListener {
 
@@ -29,6 +33,7 @@ public class DatePickerFragment extends DialogFragment
 
     public void onDateSet(DatePicker view, int year, int month, int day) {
         // Do something with the date chosen by the user
-    }
+
+    }//onDateSet
 
 }//DatePickerFragment

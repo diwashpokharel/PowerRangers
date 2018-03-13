@@ -10,8 +10,9 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import java.util.ArrayList;
 
-//for drawer courses page -- needs to be changed to fragment for drawer (paste to CourseFragmentPage)
-// used http://wptrafficanalyzer.in/blog/deleting-selected-items-from-listview-in-android/
+/** for drawer courses page -- needs to be changed to fragment for drawer (paste to CourseFragmentPage)
+ * THIS IS TO BE DELETED
+ */
 
 public class CoursesPage extends ListActivity {
 

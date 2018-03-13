@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- This is used for the pop up window when user wants to add a new question -->
+<!-- Refer to manifest for the custom applied theme to this pop up window -->
+<!-- Upload image button still PENDING, ask Ronny as he did one already for the chats *********-->
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -46,6 +49,7 @@
             android:layout_marginTop="20dp"
             android:background="@drawable/textinputborder"/>
 
+        <!-- Refer to values/array for entries in spinner -->
         <Spinner
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

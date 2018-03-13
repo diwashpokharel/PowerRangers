@@ -1,5 +1,5 @@
 package ca.wa11eubrocku.studentconnect;
-//refer to https://www.androidhive.info/2013/07/android-expandable-list-view-tutorial/ if any issues*******************
+
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -10,6 +10,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * This class is for the Hobbies register page, only shown once to each user. Uses the class
+ * ExpandableListAdapter.java as well.
+ */
 public class HobbiesRegisterPage extends AppCompatActivity {
 
     ExpandableListAdapter listAdapter;
@@ -84,6 +88,7 @@ public class HobbiesRegisterPage extends AppCompatActivity {
                 return false;
             }
         });
+
     }//onCreate
 
     /*

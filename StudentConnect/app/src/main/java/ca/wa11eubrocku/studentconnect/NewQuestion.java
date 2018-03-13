@@ -10,11 +10,17 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+/**
+ * This class used for when a user wants to post a new question.
+ * Requires question title(editTitleField), question description (editDescriptionField), and whether
+ * they want to post the question anonymously or not (anonymousCheckBox).
+ */
 public class NewQuestion extends Activity{
 
     private Spinner spinnerCourses;
     private Button postButton, cancelButton;
     private EditText editTitleField, editDescriptionField;
+    //used to store user input after post button clicked
     private String questionTitle, questionDescription, spinnerCourseSelected;
     private CheckBox anonymousCheckbox;
     private boolean anonymous;
@@ -31,19 +37,21 @@ public class NewQuestion extends Activity{
         int width = dm.widthPixels;
         int height = dm.heightPixels;
 
-        getWindow().setLayout((int)(width*.8),(int)(height*.7));//if we want window screen to be 80% of our phone's screen, multiply by 0.8
+        //if we want window screen to be 80% of our phone's screen, multiply by 0.8
+        getWindow().setLayout((int)(width*.8),(int)(height*.7));
 
         //for drop down menu(in the pop up window)
         addListenerOnButton();
 
     }//onCreate
 
-    //Used for button on pop up window
+    /**
+     * Method below adds listener on the buttons and retrieves the information entered by the user.
+     */
     public void addListenerOnButton(){
 
         //for each part of form (Spinner, buttons, edittext fields, checkbox)
         spinnerCourses = (Spinner) findViewById(R.id.spinnerCourses);
-        spinnerCourses.setPrompt("Select a course");    //check if this message shows*************************
         postButton = (Button) findViewById(R.id.postButton);
         cancelButton = (Button) findViewById(R.id.cancelButton);
         editTitleField = (EditText) findViewById(R.id.editQATitle);
@@ -57,6 +65,7 @@ public class NewQuestion extends Activity{
         //if checkbox checked, user wants to post anonymously (true if checked, false otherwise)
         anonymous = anonymousCheckbox.isChecked();
 
+        //add listener on cancel button
         cancelButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -64,6 +73,7 @@ public class NewQuestion extends Activity{
             }
         });
 
+        //add listener on post button
         postButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

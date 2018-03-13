@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-
+<!-- Represents the Courses page in the Nav Drawer of the app -->
 <!-- will be the fragment called when courses tab clicked in nav drawer -->
+<!-- Deletion confirmation prompt still PENDING ****************************-->
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"

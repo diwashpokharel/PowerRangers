@@ -7,7 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-//this class used for course page in nav drawer, not tested in drawer yet
+/**
+ * This class used for course page in nav drawer, not tested in drawer yet.
+ Refer to CoursesPage.java to see how it is suppose to be setup.
+ *
+ */
 
 public class CourseFragmentPage extends Fragment{
 

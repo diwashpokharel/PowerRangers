@@ -23,7 +23,7 @@
         <activity android:name=".CoursesPage" />
         <activity android:name=".CourseRegisterPage" />
 
-        <!--Pop up window themes below -->
+        <!--Pop up window custom themes below, can be found in values/styles -->
         <activity android:name=".NewEvent"
             android:theme="@style/AppTheme.CustomPopUpTheme"/>
 

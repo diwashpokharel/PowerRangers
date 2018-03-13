@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- This is used for the pop up window when user wants to add a new event -->
+<!-- Refer to manifest for the custom applied theme to this pop up window -->
+<!-- Date and time buttons not working properly, solution PENDING***************-->
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -104,7 +107,7 @@
                 android:textStyle="bold" />
 
         </LinearLayout>
-
+        <!-- Refer to values/array for entries in spinner -->
         <Spinner
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

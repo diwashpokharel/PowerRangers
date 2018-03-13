@@ -7,7 +7,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-//for register activity
+/**
+ * This is for the registering courses page(activity), only seen one time per user.
+ */
 
 public class CourseRegisterPage extends AppCompatActivity {
 
@@ -28,20 +30,21 @@ public class CourseRegisterPage extends AppCompatActivity {
         editCourse5 = (EditText) findViewById(R.id.editCourse5);
         editCourse6 = (EditText) findViewById(R.id.editCourse6);
 
+        //Button listener on Next button
         next.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                //go to next activity (register interested recreational page)
-                //startActivity(new Intent(MainActivity.this,PopUpAdd.class));
+                //go to next activity (register interested hobbies page)
+                startActivity(new Intent(CourseRegisterPage.this,HobbiesRegisterPage.class));
             }
         });
 
+        //Button listener on Previous button
         previous.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 //go to previous activity
                 finish();   //go to previous activity that called this register page
-                //startActivity(new Intent(MainActivity.this,PopUpAdd.class));
             }
         });
 

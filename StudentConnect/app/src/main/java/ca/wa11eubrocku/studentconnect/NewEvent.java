@@ -11,13 +11,17 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-//Able to use FragmentActiviy instead of Fragment for Nav Drawer?
-//TimePicker (for date section) does not work properly, nothing happens when date picked
+/**
+ * This class is used for the pop up window when user wants to create a new Event
+ * Able to use FragmentActiviy instead of Fragment for Nav Drawer?
+ * TimePicker (for date section) does not work properly, nothing happens when date picked**********
+ *
+ */
 
 public class NewEvent extends FragmentActivity{
 
     private Spinner spinnerEvents;
-    private Button postButton, cancelButton;
+    private Button createButton, cancelButton;
     private EditText editTitleField, editDescriptionField, editLocationField;
     private String eventTitle, eventDescription, spinnerEventTypeSelected, location;
     private CheckBox anonymousCheckbox;
@@ -47,8 +51,7 @@ public class NewEvent extends FragmentActivity{
 
         //for each part of form (Spinner, buttons, edittext fields, checkbox)
         spinnerEvents = (Spinner) findViewById(R.id.spinnerEvents);
-        spinnerEvents.setPrompt("Select type of event");    //check if this message shows*************************
-        postButton = (Button) findViewById(R.id.createButton);
+        createButton = (Button) findViewById(R.id.createButton);
         cancelButton = (Button) findViewById(R.id.cancelButton);
         editTitleField = (EditText) findViewById(R.id.editEventTitle);
         editDescriptionField = (EditText) findViewById(R.id.editEventDescription);
@@ -61,9 +64,10 @@ public class NewEvent extends FragmentActivity{
         eventDescription = editDescriptionField.getText().toString();
         location = editLocationField.getText().toString();
 
-        //if checkbox checked, user wants to post anonymously (true if checked, false otherwise)
+        //If checkbox checked, user wants to post anonymously (true if checked, false otherwise)
         anonymous = anonymousCheckbox.isChecked();
 
+        //Add listener on cancel button
         cancelButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -71,7 +75,8 @@ public class NewEvent extends FragmentActivity{
             }
         });
 
-        postButton.setOnClickListener(new View.OnClickListener() {
+        //Add listener on post button, prints out course selected and that create button was pressed
+        createButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(NewEvent.this, "Create button pressed :" +
@@ -82,6 +87,10 @@ public class NewEvent extends FragmentActivity{
 
     }//addListenerOnButton
 
+    /**
+     * Method below used for time picker component of new event.
+     * @param v
+     */
     public void showTimePickerDialog(View v){
 
         DialogFragment newFragment = new TimePickerFragment();
@@ -89,6 +98,10 @@ public class NewEvent extends FragmentActivity{
 
     }//showTimePickerDialog
 
+    /**
+     * Method below used for date picker component of new event.
+     * @param v
+     */
     public void showDatePickerDialog(View v) {
 
         DialogFragment newFragment = new DatePickerFragment();

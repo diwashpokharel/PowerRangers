@@ -1,5 +1,11 @@
 package ca.wa11eubrocku.studentconnect;
 
+/**
+ * This class is used for the Event pop up window, used for the time the user picks for the new
+ * event.
+ * Not working properly, still working on****************************************
+ */
+
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.TimePickerDialog;

@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- This layout for registering hobbies page, only shows once during sign up -->
+<!-- adding previous and next button PENDING, doesn't show up properly when using Expandable view-->
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -58,6 +60,7 @@
             android:orientation="vertical"
             android:background="#f4f4f4">
 
+            <!-- list_group.xml and list_item.xml are used with ExpandableListView -->
             <ExpandableListView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
