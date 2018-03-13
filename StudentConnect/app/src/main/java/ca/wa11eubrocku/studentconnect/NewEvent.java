@@ -1,31 +1,31 @@
 package ca.wa11eubrocku.studentconnect;
 
-import android.app.DialogFragment;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TimePicker;
 import android.widget.Toast;
+
 
 /**
  * This class is used for the pop up window when user wants to create a new Event
  * Able to use FragmentActiviy instead of Fragment for Nav Drawer?
- * TimePicker (for date section) does not work properly, nothing happens when date picked**********
  *
  */
 
-public class NewEvent extends FragmentActivity{
+public class NewEvent extends AppCompatActivity{
 
     private Spinner spinnerEvents;
-    private Button createButton, cancelButton;
+    private DatePicker date;
+    private TimePicker time;
     private EditText editTitleField, editDescriptionField, editLocationField;
-    private String eventTitle, eventDescription, spinnerEventTypeSelected, location;
-    private CheckBox anonymousCheckbox;
-    private boolean anonymous;
+    private CheckBox anonymousCheckBox;
 
     @Override
     protected  void onCreate(Bundle savedInstanceState){
@@ -42,30 +42,27 @@ public class NewEvent extends FragmentActivity{
         getWindow().setLayout((int)(width*.8),(int)(height*.7));//if we want window screen to be 80% of our phone's screen, multiply by 0.8
 
         //for drop down menu(in the pop up window)
-        addListenerOnButton();
+        addListenersOnButtons();
 
     }//onCreate
 
     //Used for button on pop up window
-    public void addListenerOnButton(){
+    public void addListenersOnButtons(){
 
         //for each part of form (Spinner, buttons, edittext fields, checkbox)
         spinnerEvents = (Spinner) findViewById(R.id.spinnerEvents);
-        createButton = (Button) findViewById(R.id.createButton);
-        cancelButton = (Button) findViewById(R.id.cancelButton);
+
+        Button createButton = (Button) findViewById(R.id.createButton);
+        Button cancelButton = (Button) findViewById(R.id.cancelButton);
+
+        date = (DatePicker) findViewById(R.id.datePicker);
+        time = (TimePicker) findViewById(R.id.timePicker);
+
         editTitleField = (EditText) findViewById(R.id.editEventTitle);
         editDescriptionField = (EditText) findViewById(R.id.editEventDescription);
         editLocationField = (EditText) findViewById(R.id.editLocation);
-        anonymousCheckbox = (CheckBox) findViewById(R.id.checkBoxEvent);
 
-        //convert values from form to string
-        spinnerEventTypeSelected = spinnerEvents.getSelectedItem().toString();
-        eventTitle = editTitleField.getText().toString();
-        eventDescription = editDescriptionField.getText().toString();
-        location = editLocationField.getText().toString();
-
-        //If checkbox checked, user wants to post anonymously (true if checked, false otherwise)
-        anonymous = anonymousCheckbox.isChecked();
+        anonymousCheckBox = (CheckBox) findViewById(R.id.checkBoxEvent);
 
         //Add listener on cancel button
         cancelButton.setOnClickListener(new View.OnClickListener(){
@@ -82,31 +79,27 @@ public class NewEvent extends FragmentActivity{
                 Toast.makeText(NewEvent.this, "Create button pressed :" +
                                 "\nEvent selected: " + String.valueOf(spinnerEvents.getSelectedItem()),
                         Toast.LENGTH_SHORT).show();
+
+            //everything below is only read and saved AFTER user clicks "Create"
+                int day = date.getDayOfMonth(); //get selected day of the month
+                int month = date.getMonth(); //get selected month
+                int year = date.getYear(); //get selected year
+
+                int hour = time.getHour();
+                int minute = time.getMinute();
+
+            //convert values from form to string
+                String spinnerEventTypeSelected = spinnerEvents.getSelectedItem().toString();
+                String eventTitle = editTitleField.getText().toString();
+                String eventDescription = editDescriptionField.getText().toString();
+                String location = editLocationField.getText().toString();
+
+            //If checkbox checked, user wants to post anonymously (true if checked, false otherwise)
+                boolean anonymous = anonymousCheckBox.isChecked();
+
             }
         });
 
     }//addListenerOnButton
-
-    /**
-     * Method below used for time picker component of new event.
-     * @param v
-     */
-    public void showTimePickerDialog(View v){
-
-        DialogFragment newFragment = new TimePickerFragment();
-        newFragment.show(getFragmentManager(), "timePicker");   //this might now work
-
-    }//showTimePickerDialog
-
-    /**
-     * Method below used for date picker component of new event.
-     * @param v
-     */
-    public void showDatePickerDialog(View v) {
-
-        DialogFragment newFragment = new DatePickerFragment();
-        newFragment.show(getFragmentManager(), "datePicker");
-
-    }//showDatePickerDialog
 
 }//PopUpAdd
