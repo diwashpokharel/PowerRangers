@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="ca.brocku.kt13nh.Student_Connect">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <application
+        android:allowBackup="true"
+        android:configChanges="orientation"
+        android:icon="@mipmap/ic_launcher"
+        android:label="Student Connect"
+        android:screenOrientation="portrait"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".MainActivity"
+            android:label="Student Connect"
+            android:theme="@style/AppTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".login_reg_java_v2.activity_login"
+            android:label="Student Connect"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme">
+            >
+        </activity>
+        <activity
+            android:name=".login_reg_java_v2.activity_register"
+            android:label="Student Connect"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme">
+            >
+        </activity>
+        <activity
+            android:name=".login_reg_java_v2.ForgotPassword"
+            android:label="Student Connect"
+            android:parentActivityName=".login_reg_java_v2.activity_login"
+            android:theme="@style/AppTheme">
+            >
+        </activity>
+        <activity
+            android:name=".base_interface_java_v3.NavBar"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".base_interface_java_v3.NewMeeting"
+            android:configChanges="orientation"
+            android:label="New Meeting"
+            android:parentActivityName=".base_interface_java_v3.NavBar"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".chatroom_components.Chatroom"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/RoomTheme" />
+        <activity
+            android:name=".qa_components.QaDisplay"
+            android:theme="@style/RoomTheme"></activity>
+    </application>
+
+</manifest>
