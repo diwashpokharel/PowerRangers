@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.diwash.inboxscreen.Form"
+    tools:layout_editor_absoluteY="81dp">
+
+    <TextView
+        android:id="@+id/textTitle"
+        android:layout_width="58dp"
+        android:layout_height="28dp"
+        android:layout_alignBaseline="@+id/enterTitle"
+        android:layout_alignBottom="@+id/enterTitle"
+        android:layout_marginEnd="11dp"
+        android:layout_toStartOf="@+id/enterTitle"
+        android:text="Title"
+        tools:layout_editor_absoluteX="38dp"
+        tools:layout_editor_absoluteY="41dp" />
+    <!-- edit text to input chat title -->
+    <EditText
+        android:id="@+id/enterTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="17dp"
+        android:ems="10"
+        android:hint="Enter Chat Title"
+        android:inputType="textPersonName"
+        tools:layout_editor_absoluteX="135dp"
+        tools:layout_editor_absoluteY="16dp" />
+
+    <TextView
+        android:id="@+id/textInvite"
+        android:layout_width="66dp"
+        android:layout_height="27dp"
+        android:layout_alignStart="@+id/textTitle"
+        android:layout_below="@+id/enterTitle"
+        android:layout_marginTop="37dp"
+        android:text="Invite"
+        tools:layout_editor_absoluteX="38dp"
+        tools:layout_editor_absoluteY="103dp" />
+    <!--multi auto complete to choose users to invite-->
+    <MultiAutoCompleteTextView
+        android:id="@+id/autoComplete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/textInvite"
+        android:layout_alignBottom="@+id/textInvite"
+        android:layout_alignParentEnd="true"
+        android:ems="10"
+        android:hint="Invite Users"
+        android:inputType="textPersonName"
+        tools:layout_editor_absoluteX="135dp"
+        tools:layout_editor_absoluteY="84dp" />
+    <!-- Create button-->
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/textInvite"
+        android:layout_below="@+id/autoComplete"
+        android:layout_marginStart="22dp"
+        android:layout_marginTop="25dp"
+        android:text="Create"
+        tools:layout_editor_absoluteX="65dp"
+        tools:layout_editor_absoluteY="257dp" />
+    <!--Cancel Button-->
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/button2"
+        android:layout_alignBottom="@+id/button2"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="51dp"
+        android:text="Cancel"
+        android:layout_below="@id/autoComplete"
+        tools:layout_editor_absoluteX="231dp"
+        tools:layout_editor_absoluteY="257dp" />
+</RelativeLayout>
