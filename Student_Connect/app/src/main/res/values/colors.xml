@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="black">#FF000000</color>
+
+    <color name="darkgrey">#FF444444</color>
+
+    <color name="red">#990000</color>
+
+    <color name="darkred">#8B0000</color>
+
+    <color name="slategrey">#2F4F4F</color>
+
+    <!-- For the tab component!-->
+    <color name="blue">#ecf3f5</color>
+    <color name="textColorPrimary">#FFFFFF</color>
+    <color name="windowBackground">#FFFFFF</color>
+    <color name="navigationBarColor">#000000</color>
+    <color name="bg">#093b15</color>
+
+</resources>
