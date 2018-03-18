@@ -3,144 +3,98 @@ package ca.wa11eubrocku.studentconnect;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ExpandableListView;
-import android.widget.Toast;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import android.widget.Button;
+import android.widget.CheckBox;
 
 /**
- * This class is for the Hobbies register page, only shown once to each user. Uses the class
- * ExpandableListAdapter.java as well.
+ * This class is for the Hobbies register page, only shown once to each user.
  */
 public class HobbiesRegisterPage extends AppCompatActivity {
-
-    ExpandableListAdapter listAdapter;
-    ExpandableListView expListView;
-    List<String> listDataHeader;    //should be adjusted for hobbies we use
-    HashMap<String, List<String>> listDataChild;    //should be adjusted for hobbies
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hobbies_register_page);
 
-        // get the ListView
-        expListView = (ExpandableListView) findViewById(R.id.expandableListView);
-
-        // preparing list data
-        prepareListData();
-
-        listAdapter = new ExpandableListAdapter(this, listDataHeader, listDataChild);
-
-        // setting list adapter
-        expListView.setAdapter(listAdapter);
-
-        // ListView Group click listener
-        expListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-            @Override
-            public boolean onGroupClick(ExpandableListView parent, View v,
-                                        int groupPosition, long id) {
-                // Toast.makeText(getApplicationContext(),
-                // "Group Clicked " + listDataHeader.get(groupPosition),
-                // Toast.LENGTH_SHORT).show();
-                return false;
-            }
-        });
-
-        // ListView Group expanded listener
-        expListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
-            @Override
-            public void onGroupExpand(int groupPosition) {
-                Toast.makeText(getApplicationContext(),
-                        listDataHeader.get(groupPosition) + " Expanded",
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        // ListView Group collapsed listener
-        expListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
-            @Override
-            public void onGroupCollapse(int groupPosition) {
-                Toast.makeText(getApplicationContext(),
-                        listDataHeader.get(groupPosition) + " Collapsed",
-                        Toast.LENGTH_SHORT).show();
-
-            }
-        });
-
-        // ListView on child click listener
-        expListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-
-            @Override
-            public boolean onChildClick(ExpandableListView parent, View v,
-                                        int groupPosition, int childPosition, long id) {
-                // TODO Auto-generated method stub
-                Toast.makeText(
-                        getApplicationContext(),
-                        listDataHeader.get(groupPosition)
-                                + " : "
-                                + listDataChild.get(
-                                listDataHeader.get(groupPosition)).get(
-                                childPosition), Toast.LENGTH_SHORT)
-                        .show();
-                return false;
-            }
-        });
+        addListeners();
 
     }//onCreate
 
-    /*
-     * Preparing the list data
-     */
-    private void prepareListData() {
+    private void addListeners(){
 
-        listDataHeader = new ArrayList<String>();
-        listDataChild = new HashMap<String, List<String>>();
+        Button next = (Button) findViewById(R.id.nextButton);
+        Button previous = (Button)findViewById(R.id.previousButton);
 
-        // Adding child data (we listed these in design phase)
-        listDataHeader.add("Creative Arts");
-        listDataHeader.add("Educational");
-        listDataHeader.add("Games and Sports");
-        listDataHeader.add("Outdoor Recreation");
-        listDataHeader.add("Other");
+        //creative arts category checkboxes
+        final CheckBox checkPlays = (CheckBox)findViewById(R.id.artsCheckPlays);
+        final CheckBox checkSculp = (CheckBox)findViewById(R.id.artsCheckSculpting);
+        final CheckBox checkPhoto = (CheckBox)findViewById(R.id.artsCheckPhotography);
+        final CheckBox checkPaint = (CheckBox)findViewById(R.id.artsCheckPainting);
 
-        // Adding child data (examples)
-        List<String> creativeArts = new ArrayList<String>();
-        creativeArts.add("Painting");
-        creativeArts.add("Photography");
-        creativeArts.add("Sculpting");
-        creativeArts.add("Plays");
+        //educational category checkboxes
+        final CheckBox checkProgramming = (CheckBox)findViewById(R.id.eduCheckProgramming);
+        final CheckBox checkMuseum = (CheckBox)findViewById(R.id.eduCheckMuseum);
+        final CheckBox checkBookClub = (CheckBox)findViewById(R.id.eduCheckBookClub);
 
-        List<String> educational = new ArrayList<String>();
-        educational.add("Book Clubs");
-        educational.add("Programming");
-        educational.add("Museums");
+        //Games and sports category checkboxes
+        final CheckBox checkSoccer = (CheckBox)findViewById(R.id.gamesCheckSoccer);
+        final CheckBox checkHockey = (CheckBox)findViewById(R.id.gamesCheckHockey);
+        final CheckBox checkBasketball = (CheckBox)findViewById(R.id.gamesCheckBasketball);
+        final CheckBox checkVolleyball = (CheckBox)findViewById(R.id.gamesCheckVolleyball);
+
+        //outdoor recreation category checkboxes
+        final CheckBox checkField = (CheckBox)findViewById(R.id.outdoorCheckField);
+        final CheckBox checkHike = (CheckBox)findViewById(R.id.outdoorCheckHikes);
+        final CheckBox checkBird = (CheckBox)findViewById(R.id.outdoorCheckBird);
+
+        //other category checkboxes
+        final CheckBox checkEat = (CheckBox)findViewById(R.id.otherCheckEating);
+        final CheckBox checkEscape = (CheckBox)findViewById(R.id.otherCheckEscape);
+        final CheckBox checkTravel = (CheckBox)findViewById(R.id.otherCheckTraveling);
 
 
-        List<String> gamesAndSports = new ArrayList<String>();
-        gamesAndSports.add("Soccer");
-        gamesAndSports.add("Hockey");
-        gamesAndSports.add("Basketball");
-        gamesAndSports.add("Volleyball");
+        //Button listener on Previous button
+        previous.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                //go to previous activity
+                finish();   //go to previous activity that called this register page
+            }
+        });
 
-        List<String> outdoorRecreation = new ArrayList<String>();
-        outdoorRecreation.add("Bird Watching");
-        outdoorRecreation.add("Field Trips");
-        outdoorRecreation.add("Eating at new places");
+        //Button listener on Next button
+        next.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                //variables are true if checkbox checked
+                boolean plays = checkPlays.isChecked();
+                boolean sculp = checkSculp.isChecked();
+                boolean photo = checkPhoto.isChecked();
+                boolean paint = checkPaint.isChecked();
 
-        List<String> other = new ArrayList<String>();
-        other.add("Food");
-        other.add("Traveling");
-        other.add("Escape Rooms");
+                boolean programming = checkProgramming.isChecked();
+                boolean museum = checkMuseum.isChecked();
+                boolean bookClub = checkBookClub.isChecked();
 
-        listDataChild.put(listDataHeader.get(0), creativeArts); // Header, Child data
-        listDataChild.put(listDataHeader.get(1), educational);
-        listDataChild.put(listDataHeader.get(2), gamesAndSports);
-        listDataChild.put(listDataHeader.get(3), outdoorRecreation);
-        listDataChild.put(listDataHeader.get(4), other);
+                boolean soccer = checkSoccer.isChecked();
+                boolean basketball = checkBasketball.isChecked();
+                boolean volleyball = checkVolleyball.isChecked();
+                boolean hockey = checkHockey.isChecked();
 
-    }//prepareListData
+                boolean fieldTrip = checkField.isChecked();
+                boolean hike = checkHike.isChecked();
+                boolean birdWatching = checkBird.isChecked();
+
+                boolean eating = checkEat.isChecked();
+                boolean escapeRoom = checkEscape.isChecked();
+                boolean travel = checkTravel.isChecked();
+
+                //go to what activity/page from here kevin?*****************************************************************************************************************************
+            }
+        });
+
+
+    }
+
 
 }//HobbiesRegisterPage

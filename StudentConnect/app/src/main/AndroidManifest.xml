@@ -22,6 +22,7 @@
         </activity>
         <activity android:name=".CoursesPage" />
         <activity android:name=".CourseRegisterPage" />
+        <activity android:name=".HobbiesRegisterPage" />
 
         <!--Pop up window custom themes below, can be found in values/styles -->
         <activity android:name=".NewEvent"
@@ -30,7 +31,6 @@
         <activity android:name=".NewQuestion"
             android:theme="@style/AppTheme.CustomPopUpTheme"/>
 
-        <activity android:name=".HobbiesRegisterPage" />
         <!-- end of activities -->
 
     </application>

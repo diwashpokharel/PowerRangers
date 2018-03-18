@@ -45,6 +45,7 @@
             android:hint="Title"
             android:paddingLeft="10dp"
             android:maxLength="128"
+            android:inputType="textNoSuggestions|textVisiblePassword"
             android:textStyle="italic"
             android:layout_marginTop="20dp"
             android:background="@drawable/textinputborder"/>

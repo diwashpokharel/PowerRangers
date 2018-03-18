@@ -1,3 +1,93 @@
+<?xml version ="1.0" encoding="utf-8"?>
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scrollbars="vertical"
+    android:id="@+id/newMessage"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textTitle"
+                android:layout_gravity="center_horizontal"
+                android:text="Title"
+                android:textAllCaps="true"
+                android:textStyle="bold"
+                android:textSize="10pt"
+                android:layout_marginTop="20dp"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="8dp"/>
+        </LinearLayout>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:id="@+id/enterTitle"
+            android:hint="Enter Chat Title"
+            android:paddingLeft="10dp"
+            android:maxLength="128"
+            android:inputType="textNoSuggestions|textVisiblePassword"
+            android:textStyle="italic"
+            android:layout_marginTop="20dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textInvite"
+            android:layout_gravity="center_horizontal"
+            android:text="Invite Users"
+            android:textAllCaps="true"
+            android:textStyle="bold"
+            android:textSize="10pt"
+            android:layout_marginTop="20dp"/>
+        <MultiAutoCompleteTextView
+            android:id="@+id/autoComplete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Invite Users"
+            android:inputType="textPersonName"
+            android:maxLength="1024"
+            android:layout_marginTop="20dp"
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp">
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/cancelButton"
+                android:text="Cancel" />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/postButton"
+                android:text="Create"/>
+        </LinearLayout>
+    </LinearLayout>
+
+
+
+</ScrollView>
+
+
+<!--
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -17,9 +107,11 @@
         android:layout_toStartOf="@+id/enterTitle"
         android:text="Title"
         tools:layout_editor_absoluteX="38dp"
-        tools:layout_editor_absoluteY="41dp" />
-    <!-- edit text to input chat title -->
-    <EditText
+        tools:layout_editor_absoluteY="41dp"
+     edit text to input chat title -
+
+
+<EditText
         android:id="@+id/enterTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -41,8 +133,9 @@
         android:layout_marginTop="37dp"
         android:text="Invite"
         tools:layout_editor_absoluteX="38dp"
-        tools:layout_editor_absoluteY="103dp" />
-    <!--multi auto complete to choose users to invite-->
+        tools:layout_editor_absoluteY="103dp"
+
+    multi auto complete to choose users to invite
     <MultiAutoCompleteTextView
         android:id="@+id/autoComplete"
         android:layout_width="wrap_content"
@@ -55,7 +148,9 @@
         android:inputType="textPersonName"
         tools:layout_editor_absoluteX="135dp"
         tools:layout_editor_absoluteY="84dp" />
-    <!-- Create button-->
+    Create button
+
+
     <Button
         android:id="@+id/button2"
         android:layout_width="wrap_content"
@@ -67,7 +162,9 @@
         android:text="Create"
         tools:layout_editor_absoluteX="65dp"
         tools:layout_editor_absoluteY="257dp" />
-    <!--Cancel Button-->
+    Cancel Button
+
+
     <Button
         android:id="@+id/button3"
         android:layout_width="wrap_content"
@@ -81,3 +178,4 @@
         tools:layout_editor_absoluteX="231dp"
         tools:layout_editor_absoluteY="257dp" />
 </RelativeLayout>
+-->
