@@ -28,6 +28,11 @@ public class MessageAdapter extends ArrayAdapter<Message> {
     }
 
     @Override
+    /**
+     * Provides the view for the adapter. Will display name, time, and a file link, picture or
+     * a message
+     * Clicking ont he file link will allow user to download the file
+     */
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
             convertView = ((Activity) getContext()).getLayoutInflater()
@@ -43,8 +48,6 @@ public class MessageAdapter extends ArrayAdapter<Message> {
         TextView timeTextView = (TextView) convertView.findViewById(R.id.chatTimeTextView);
 
         final Message message = getItem(position);
-
-
         boolean isPhoto = message.getPhotoUrl() != null;
         boolean isFileLink = message.getFileUrl() != null;
 

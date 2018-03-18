@@ -1,18 +1,36 @@
 package ca.brocku.kt13nh.Student_Connect.base_interface_java_v3;
 
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.MultiAutoCompleteTextView;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import ca.brocku.kt13nh.Student_Connect.R;
+import ca.brocku.kt13nh.Student_Connect.chatroom_components.ChatroomCreatorDialog;
+
 /*
 * Class designed for the home page, this will be the main screen for the tab selections, and the
 * content within those tabs.
@@ -20,6 +38,8 @@ import ca.brocku.kt13nh.Student_Connect.R;
 public class
 Home extends Fragment {
 
+    private int tabPosition = 0;
+    private String[] users;
     /*
     * create view and inflate the tablayouts with the tabs
     * */
@@ -32,6 +52,26 @@ Home extends Fragment {
         Toolbar toolbar = (Toolbar)v.findViewById(R.id.toolbar);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
 
+        FloatingActionButton addButton = (FloatingActionButton) v.findViewById(R.id.addButton);
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (tabPosition == 0){
+                    //Opens Dialog that allows you to add chatrooms
+                    Dialog chatCreatorDialog = new ChatroomCreatorDialog(v.getContext());
+                    chatCreatorDialog.getWindow().getAttributes().width = ViewGroup.LayoutParams.MATCH_PARENT;
+                    chatCreatorDialog.setTitle("Create Private Chatroom");
+                    chatCreatorDialog.show();
+                }
+                else if(tabPosition == 1){
+
+                }
+                else{
+
+                }
+            }
+        });
+
         TabLayout tabLayout = (TabLayout)v.findViewById(R.id.tab_layout);
 
         inflateTabs(v,tabLayout);
@@ -42,18 +82,6 @@ Home extends Fragment {
     }
 
 
-//Placeholder for the action button, ensure it works based on tab selected
-
-//    public void initFloatingActionButton() {
-//        FloatingActionButton fab = (FloatingActionButton)this.getView().findViewById(R.id.addButton);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent newMeeting = new Intent(Home.this.getActivity(),NewMeeting.class);
-//                startActivity(newMeeting);
-//            }
-//        });
-//    }
 
     /*
     * Create the tabs for the tab layout, and setting their titles
@@ -74,6 +102,7 @@ Home extends Fragment {
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
+                tabPosition = tab.getPosition();
                 viewPager.setCurrentItem(tab.getPosition());
             }
 

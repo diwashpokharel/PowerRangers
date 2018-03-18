@@ -10,7 +10,9 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.ContextMenu;
+import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -43,9 +45,10 @@ import ca.brocku.kt13nh.Student_Connect.R;
 
 public class Chatroom extends AppCompatActivity {
 
-    public static final String ANONYMOUS = "anonymous";
+    public static final String ANONYMOUS = "Anonymous";
     public static final int DEFAULT_MSG_LENGTH_LIMIT = 2048;
 
+    private static final int RC_SETTINGS = 1;
     private static final int RC_PHOTO_PICKER =  2;
     private static final int RC_FILE_PICKER = 1212;
 
@@ -56,7 +59,14 @@ public class Chatroom extends AppCompatActivity {
     private EditText mMessageEditText;
     private Button mSendButton;
 
+    private String chatID;
+    private String chatName;
+    private String admin;
+    private String userEmail;
     private String mUsername;
+    private String displayName;
+    private boolean isPublic;
+    //private int userReportCount;
 
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mDatabaseReference;
@@ -74,129 +84,14 @@ public class Chatroom extends AppCompatActivity {
         setContentView(R.layout.activity_chatroom);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setTitle(getIntent().getStringExtra("chatroomName"));
-
-        initializeFirebaseComponents();
-        attachDatabaseReadListener();
 
         initializeComponents();
+        initializeFirebaseComponents();
         attachListeners();
+        attachDatabaseReadListener();
     }
 
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v,
-                                    ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        if (v.getId()==R.id.messageListView) {
-            MenuInflater inflater = getMenuInflater();
-            inflater.inflate(R.menu.report_menu, menu);
-        }
-    }
 
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo info =
-                (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        String userToReport = ((Message) mMessageListView.getItemAtPosition((int)info.id))
-                                            .getName();
-
-        switch(item.getItemId()) {
-            case R.id.report:
-                if(mUsername.equals(userToReport))
-                    Toast.makeText(Chatroom.this, "You cannot report yourself",
-                                            Toast.LENGTH_SHORT);
-                else{
-                    String userToReportFirstName = userToReport.split(" ")[0];
-                   mCurrentUserReference.getParent()
-                           .child("first_name").equalTo(userToReportFirstName).getRef()
-                           .child("last_name");
-                }
-
-                return true;
-            default:
-                return super.onContextItemSelected(item);
-        }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()){
-            case android.R.id.home:
-                finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data){
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if(resultCode == RESULT_OK){
-            if(requestCode == RC_PHOTO_PICKER){
-                Uri selectedImageUri = data.getData();
-                //Get a reference to store file at Images/<FILENAME>
-                StorageReference imageRef = mImagesStorageReference.child(
-                        selectedImageUri.getLastPathSegment());
-
-                //Upload file to Firebase storage
-                imageRef.putFile(selectedImageUri).addOnSuccessListener(this,
-                        new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                                Message message = new Message(null, mUsername,
-                                        downloadUrl.toString(),null, null);
-                                mMessagesDatabaseReference.push().setValue(message);
-                            }
-                        });
-            }
-            else if(requestCode == RC_FILE_PICKER){
-                Uri selectedFileUri = data.getData();
-                String uriString = selectedFileUri.toString();
-
-                //Find the name of the file selected by the user
-                File myFile = new File(uriString);
-                String displayName = null;
-
-                if (uriString.startsWith("content://")) {
-                    Cursor cursor = null;
-                    try {
-                        cursor = this.getContentResolver().query(selectedFileUri, null,
-                                null, null,
-                                null);
-                        if (cursor != null && cursor.moveToFirst()) {
-                            displayName = cursor.getString(cursor.getColumnIndex
-                                                                    (OpenableColumns.DISPLAY_NAME));
-                        }
-                    } finally {
-                        cursor.close();
-                    }
-                } else if (uriString.startsWith("file://")) {
-                    displayName = myFile.getName();
-                }
-
-                //Get a reference to store file at Files/<FILENAME>
-                final String fileName = displayName;
-                StorageReference fileRef = mFilesStorageReference.child(
-                        selectedFileUri.getLastPathSegment());
-
-                //Add message object containing the user, name of the selected file, and the url to
-                // its location in Firebase Storage to the database
-                fileRef.putFile(selectedFileUri).addOnSuccessListener(this,
-                        new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                                Message message = new Message(null, mUsername, null,
-                                        fileName, downloadUrl.toString());
-                                mMessagesDatabaseReference.push().setValue(message);
-                            }
-                        });
-            }
-        }
-    }
 
     private void initializeFirebaseComponents(){
         mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -206,8 +101,6 @@ public class Chatroom extends AppCompatActivity {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         mCurrentUserReference = mDatabaseReference.child("User").child(currentUser.getUid());
 
-        String chatID = getIntent().getStringExtra("chatID");
-
         mMessagesDatabaseReference = mDatabaseReference.child("Chatrooms")
                 .child(chatID).child("messages");
 
@@ -216,6 +109,14 @@ public class Chatroom extends AppCompatActivity {
     }
 
     private void initializeComponents(){
+        //Gets all data passed in from previous activity
+        Intent currentIntent = getIntent();
+        chatID = currentIntent.getStringExtra("chatID");
+        isPublic = currentIntent.getBooleanExtra("isPublic", true);
+        chatName = currentIntent.getStringExtra("chatroomName");
+        admin = currentIntent.getStringExtra("admin");
+        setTitle(chatName);
+
         // Initialize references to views
         mMessageListView = (ListView) findViewById(R.id.messageListView);
         mPhotoPickerButton = (ImageButton) findViewById(R.id.chatPhotoPickerButton);
@@ -270,8 +171,11 @@ public class Chatroom extends AppCompatActivity {
         mCurrentUserReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                //userReportCount = (int)dataSnapshot.child("report_count").getValue();
+                userEmail = dataSnapshot.child("email").getValue().toString();
                 mUsername = dataSnapshot.child("first_name").getValue().toString() + " " +
                         dataSnapshot.child("last_name").getValue().toString();
+                displayName = mUsername;
             }
 
             @Override
@@ -280,13 +184,10 @@ public class Chatroom extends AppCompatActivity {
             }
         });
 
-        //Selecting a message in the message list view will give the option to report
-        mMessageListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                view.showContextMenu();
-            }
-        });
+        //Long cLlcking a message in the message list view will give the option to report
+        mMessageListView.setLongClickable(true);
+        registerForContextMenu(mMessageListView);
+
 
         // ImagePickerButton shows an image picker to upload a image for a message
         mPhotoPickerButton.setOnClickListener(new View.OnClickListener() {
@@ -301,6 +202,7 @@ public class Chatroom extends AppCompatActivity {
             }
         });
 
+        //Shows a file picker to upload a file to the chatroom
         mFilePickerButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
                 // TODO: Fire an intent to show an image picker
@@ -339,12 +241,167 @@ public class Chatroom extends AppCompatActivity {
         mSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Message message = new Message(mMessageEditText.getText().toString(), mUsername,
+                Message message = new Message(mMessageEditText.getText().toString(), displayName,
                         null, null, null);
                 mMessagesDatabaseReference.push().setValue(message);
                 // Clear input box
                 mMessageEditText.setText("");
             }
         });
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v,
+                                    ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        if (v.getId()==R.id.messageListView) {
+            MenuInflater inflater = getMenuInflater();
+            inflater.inflate(R.menu.report_menu, menu);
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info =
+                (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        String userToReport = ((Message) mMessageListView.getItemAtPosition((int)info.id))
+                .getName();
+
+        switch(item.getItemId()) {
+            case R.id.report:
+                if(mUsername.equals(userToReport))
+                    Toast.makeText(getApplicationContext(), "You cannot report yourself",
+                            Toast.LENGTH_SHORT).show();
+                else{
+                    if(!userToReport.equals(ANONYMOUS)) {
+                        Toast.makeText(getApplicationContext(), "This user has been reported",
+                                Toast.LENGTH_SHORT).show();
+                        String userToReportFirstName = userToReport.split(" ")[0];
+                        String userToReportLastName = userToReport.split(" ")[1];
+
+                    }
+                }
+
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.chatroom_settings, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()){
+            case android.R.id.home:
+                finish();
+                return true;
+            case R.id.chatSettings:
+                //Goes to settings page
+                Intent settingsIntent = new Intent(Chatroom.this,
+                                                        ChatroomSettings.class);
+                //Passes useful data like currentUserID to settings actvity
+                settingsIntent.putExtra("chatID", chatID);
+                settingsIntent.putExtra("isPublic", isPublic);
+                settingsIntent.putExtra("chatName", chatName);
+                settingsIntent.putExtra("admin", admin);
+                settingsIntent.putExtra("userEmail", userEmail);
+                if(displayName.equals(ANONYMOUS))
+                    settingsIntent.putExtra("anonymous", true);
+                else
+                    settingsIntent.putExtra("anonymous", false);
+                startActivityForResult(settingsIntent, RC_SETTINGS);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(resultCode == RESULT_OK){
+            if(requestCode == RC_SETTINGS){
+                //destroys the activity if the user has left the chat
+                if(data.getBooleanExtra("left", false) == true){
+                    finish();
+                }
+                //Sets display name to anonymous if user selected Post As Anonymous
+                else {
+                    if (data.getBooleanExtra("anonymous", false) == true)
+                        displayName = ANONYMOUS;
+                    else
+                        displayName = mUsername;
+                }
+            }
+            else if(requestCode == RC_PHOTO_PICKER){
+                Uri selectedImageUri = data.getData();
+                //Get a reference to store file at Images/<FILENAME>
+                StorageReference imageRef = mImagesStorageReference.child(
+                        selectedImageUri.getLastPathSegment());
+
+                //Upload file to Firebase storage
+                imageRef.putFile(selectedImageUri).addOnSuccessListener(this,
+                        new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                                Message message = new Message(null, displayName,
+                                        downloadUrl.toString(),null, null);
+                                mMessagesDatabaseReference.push().setValue(message);
+                            }
+                        });
+            }
+            else if(requestCode == RC_FILE_PICKER){
+                Uri selectedFileUri = data.getData();
+                String uriString = selectedFileUri.toString();
+
+                File myFile = new File(uriString);
+                String displayName = null;
+
+                //Find the name of the file selected by the user
+                if (uriString.startsWith("content://")) {
+                    Cursor cursor = null;
+                    try {
+                        cursor = this.getContentResolver().query(selectedFileUri, null,
+                                null, null,
+                                null);
+                        if (cursor != null && cursor.moveToFirst()) {
+                            displayName = cursor.getString(cursor.getColumnIndex
+                                    (OpenableColumns.DISPLAY_NAME));
+                        }
+                    } finally {
+                        cursor.close();
+                    }
+                } else if (uriString.startsWith("file://")) {
+                    displayName = myFile.getName();
+                }
+
+                //Get a reference to store file at Files/<FILENAME>
+                final String fileName = displayName;
+                StorageReference fileRef = mFilesStorageReference.child(
+                        selectedFileUri.getLastPathSegment());
+
+                final String uploadedBy = displayName;
+                //Add message object containing the user, name of the selected file, and the url to
+                // its location in Firebase Storage to the database
+                fileRef.putFile(selectedFileUri).addOnSuccessListener(this,
+                        new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                                Message message = new Message(null, uploadedBy, null,
+                                        fileName, downloadUrl.toString());
+                                mMessagesDatabaseReference.push().setValue(message);
+                            }
+                        });
+            }
+        }
     }
 }

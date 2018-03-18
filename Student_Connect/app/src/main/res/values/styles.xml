@@ -8,8 +8,8 @@
     </style>
 
     <style name="RoomTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorPrimary">#000000</item>
-        <item name="colorPrimaryDark">#000000</item>
+        <item name="colorPrimary">#212121</item>
+        <item name="colorPrimaryDark">#303F9F</item>
         <item name="colorAccent">@color/darkgrey</item>
     </style>
 

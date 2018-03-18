@@ -71,8 +71,8 @@ public class QaFragment extends Fragment {
     }
 
     /**
-     * Attaches listener to questions table. When a question is added, that chatroom appears in
-     * the inbox
+     * Attaches listener to questions table. When a question is added, that question appears in
+     * the QA tab
      */
     private void attachDatabaseReadListener(){
         if(mChildEventListener == null) {

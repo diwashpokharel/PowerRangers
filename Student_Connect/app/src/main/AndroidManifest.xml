@@ -60,6 +60,10 @@
             android:theme="@style/RoomTheme" />
         <activity
             android:name=".qa_components.QaDisplay"
+            android:theme="@style/RoomTheme" />
+        <activity android:name=".chatroom_components.ChatroomCreatorDialog" />
+        <activity
+            android:name=".chatroom_components.ChatroomSettings"
             android:theme="@style/RoomTheme"></activity>
     </application>
 

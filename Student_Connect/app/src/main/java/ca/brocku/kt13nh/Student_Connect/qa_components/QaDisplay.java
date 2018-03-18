@@ -205,6 +205,9 @@ public class QaDisplay extends AppCompatActivity {
         }
     }
 
+    /**
+     * Initializes all Firebase components like DatabaseReferences, FirebaseStorage etc.
+     */
     private void initializeFirebaseComponents(){
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mDatabaseReference = mFirebaseDatabase.getReference();
@@ -222,6 +225,9 @@ public class QaDisplay extends AppCompatActivity {
         mFilesStorageReference = mFirebaseStorage.getReference().child("Files");
     }
 
+    /**
+     * Initializes all TextViews, ListViews, Buttons etc
+     */
     private void initializeComponents(){
         //Set question details at top of activity
         TextView mAskerTextView = (TextView) findViewById(R.id.askerTextView);

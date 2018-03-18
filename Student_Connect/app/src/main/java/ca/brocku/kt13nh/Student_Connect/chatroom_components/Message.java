@@ -19,10 +19,21 @@ public class Message {
     private String fileUrl;
     private String time;
 
+    /**
+     * Default constructor
+     */
     public Message(){
 
     }
 
+    /**
+     * Constructor that is primarily used to create Message objects
+     * @param text
+     * @param name
+     * @param photoUrl
+     * @param fileName
+     * @param fileUrl
+     */
     public Message(String text, String name, String photoUrl, String fileName, String fileUrl ) {
         this.text = text;
         this.name = name;
