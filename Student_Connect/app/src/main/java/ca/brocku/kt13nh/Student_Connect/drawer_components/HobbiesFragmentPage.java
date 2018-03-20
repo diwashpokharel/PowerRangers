@@ -67,7 +67,10 @@ public class HobbiesFragmentPage extends ListFragment {
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container,@Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.hobbies_fragment_page, container, false);
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
         getDatabaseInfo();
         setButtonListeners(v);
         setListView();
@@ -202,7 +205,11 @@ public class HobbiesFragmentPage extends ListFragment {
     // comparing purposes and autocomplete
     // */
     private void getDatabaseInfo(){
+<<<<<<< HEAD
         table_hobbies.addListenerForSingleValueEvent(new ValueEventListener() {
+=======
+        table_hobbies.addValueEventListener(new ValueEventListener() {
+>>>>>>> master
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 edit = (AutoCompleteTextView) getActivity().findViewById(R.id.hobbyEditItem);

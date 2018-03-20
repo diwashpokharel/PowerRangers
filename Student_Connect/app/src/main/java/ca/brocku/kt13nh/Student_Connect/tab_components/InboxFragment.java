@@ -125,6 +125,7 @@ public class InboxFragment extends Fragment {
 
             }
         });
+<<<<<<< HEAD
 
     }
 
@@ -206,6 +207,78 @@ public class InboxFragment extends Fragment {
                 }
 
 
+=======
+
+    }
+
+    private void attachUserTableListener(){
+        mUserDatabaseReference.child(user.getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Map<String, String> enrolledMapping = new HashMap<>();
+
+                //Gets all enrolled courses, events joined, hobbies added and private chats joined for
+                //this user from the DB
+                if(!dataSnapshot.child("enrolled").getValue().toString().equals(""))
+                    enrolledMapping= (Map<String, String>) dataSnapshot.child("enrolled").getValue();
+
+                Map<String, String> privateChatsMapping = new HashMap<>();
+                if(!dataSnapshot.child("private_chats").getValue().toString().equals(""))
+                    privateChatsMapping = (Map<String, String>) dataSnapshot.child("private_chats").getValue();
+
+                Map<String, String> joinedEventsMapping = new HashMap<>();
+                if(!dataSnapshot.child("events").getValue().toString().equals("")) {
+                    joinedEventsMapping = (Map<String, String>) dataSnapshot.child("events").getValue();
+                }
+                Map<String, String> hobbiesMapping = (Map<String, String>) dataSnapshot.child("hobbies").getValue();
+                if(!dataSnapshot.child("events").getValue().toString().equals("")) {
+                    hobbiesMapping = (Map<String, String>) dataSnapshot.child("hobbies").getValue();
+                }
+                //Makes list of enrolled courseIDs, joined private chat IDs, joined event IDs,
+                // and hobbies
+                coursesEnrolledList.clear();
+                for (String courseID : enrolledMapping.keySet()) {
+                    coursesEnrolledList.add(courseID);
+                }
+                privateChatsList.clear();
+                for (String privateChat : privateChatsMapping.keySet()) {
+                    privateChatsList.add(privateChat);
+                }
+                eventsJoinedList.clear();
+                for (String event : joinedEventsMapping.keySet()) {
+                    eventsJoinedList.add(event);
+                }
+                hobbiesList.clear();
+                for (String hobby : hobbiesMapping.keySet()) {
+                    hobbiesList.add(hobby);
+                }
+
+                chatroomListAdapter.clearChatrooms();
+                for (Map.Entry<String, Object> chatroom : chatrooms.entrySet()) {
+                    String chatID = chatroom.getKey();
+                    Map<String, Object> chatroomObject = (Map<String, Object>) chatroom.getValue();
+                    String chatName = (String) chatroomObject.get("ChatName");
+                    boolean isPublic = (boolean) chatroomObject.get("isPublic");
+                    String admin = "";
+                    if(!isPublic)
+                        admin = (String) chatroomObject.get("admin");
+
+                    //Only displays the chatroom if user has enrolled in the course/joined the
+                    // event/been invited to the private chat
+                    if (coursesEnrolledList.contains(chatName) || privateChatsList.contains(chatID)
+                            || eventsJoinedList.contains(chatID) || hobbiesList.contains(chatID)) {
+                        Map<String, Object> chatroomData = new HashMap<>();
+                        chatroomData.put("ChatID", chatID);
+                        chatroomData.put("ChatName", chatName);
+                        chatroomData.put("isPublic", isPublic);
+                        chatroomData.put("admin", admin);
+                        chatroomListAdapter.addChatroom(chatroomData);
+                        recyclerView.setAdapter(chatroomListAdapter);
+                    }
+                }
+
+
+>>>>>>> master
             }
 
             @Override
