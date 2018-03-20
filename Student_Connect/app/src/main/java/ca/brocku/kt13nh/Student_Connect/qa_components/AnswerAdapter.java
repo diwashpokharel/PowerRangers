@@ -21,7 +21,9 @@ import ca.brocku.kt13nh.Student_Connect.R;
 import ca.brocku.kt13nh.Student_Connect.chatroom_components.Message;
 
 /**
- * Created by pc-user on 3/12/2018.
+ * Author: Goal Diggers
+ * ArrayAdapter that serves as a container for answer objects
+ * Also sets the view for these answer ojects so that they are displayed properly
  */
 
 public class AnswerAdapter extends ArrayAdapter<Answer> {

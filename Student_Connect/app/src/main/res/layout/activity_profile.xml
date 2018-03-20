@@ -48,6 +48,7 @@
                 android:layout_height="wrap_content"
                 android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                 android:hint="First Name"
+                android:importantForAutofill="noExcludeDescendants"
                 android:maxLength="32"
                 android:scrollHorizontally="true"
                 android:singleLine="true" />
@@ -67,6 +68,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                android:importantForAutofill="noExcludeDescendants"
                 android:hint="Last Name"
                 android:maxLength="32" />
         </android.support.design.widget.TextInputLayout>
@@ -124,6 +126,15 @@
                 android:inputType="textPassword"
                 android:maxLength="32" />
         </android.support.design.widget.TextInputLayout>
+
+        <!-- The one and only one button, the change password button.-->
+        <Button
+            android:id="@+id/changePassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?android:colorBackground"
+            android:onClick="changePasswordClicked"
+            android:text="Change Password" />
 
         <!-- The one and only one button, the save button.-->
         <Button

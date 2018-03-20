@@ -1,5 +1,10 @@
 package ca.brocku.kt13nh.Student_Connect.chatroom_components;
 
+/**
+ * Author: Goal Diggers
+ * Container class for message objects in DB
+ */
+
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.content.Intent;
@@ -10,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
@@ -174,11 +180,10 @@ public class ChatroomSettings extends AppCompatActivity {
         dialog.setView(addUserView);
 
         //Sets autocomplete to show users in userListAdapter
-        final MultiAutoCompleteTextView autoCompleteView = (MultiAutoCompleteTextView)
+        final AutoCompleteTextView autoCompleteView = (AutoCompleteTextView)
                                                         addUserView.findViewById(R.id.addUserField);
         final ArrayAdapter<String> userListAdapter = new ArrayAdapter<String>
                 (this,android.R.layout.simple_list_item_1,allUsersList);
-        autoCompleteView.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
         autoCompleteView.setThreshold(1);
         autoCompleteView.setAdapter(userListAdapter);
 

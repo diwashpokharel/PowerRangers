@@ -29,6 +29,7 @@ import ca.brocku.kt13nh.Student_Connect.tab_components.EventsFragment;
 
 
 /**
+ * Author: Goal Diggers
  * This class is used for the pop up window when user wants to create a new Event
  * Able to use FragmentActiviy instead of Fragment for Nav Drawer?
  *
@@ -36,11 +37,9 @@ import ca.brocku.kt13nh.Student_Connect.tab_components.EventsFragment;
 
 public class NewEvent extends AppCompatActivity{
 
-    private Spinner spinnerEvents;
     private DatePicker date;
     private TimePicker time;
     private EditText editTitleField, editDescriptionField, editLocationField;
-    private CheckBox anonymousCheckBox;
     private FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
     private DatabaseReference table_events = mFirebaseDatabase.getReference().child("Events");
     private DatabaseReference table_user = mFirebaseDatabase.getReference().child("User");
@@ -70,7 +69,6 @@ public class NewEvent extends AppCompatActivity{
 
         //for each part of form (Spinner, buttons, edittext fields, checkbox)
         //spinnerEvents = (Spinner) findViewById(R.id.spinnerEvents);
-
         Button createButton = (Button) findViewById(R.id.createButton);
         Button cancelButton = (Button) findViewById(R.id.cancelButton);
 
@@ -80,8 +78,6 @@ public class NewEvent extends AppCompatActivity{
         editTitleField = (EditText) findViewById(R.id.editEventTitle);
         editDescriptionField = (EditText) findViewById(R.id.editEventDescription);
         editLocationField = (EditText) findViewById(R.id.editLocation);
-
-        //anonymousCheckBox = (CheckBox) findViewById(R.id.checkBoxEvent);
 
         //Add listener on cancel button
         cancelButton.setOnClickListener(new View.OnClickListener(){

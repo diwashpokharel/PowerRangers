@@ -90,7 +90,9 @@ public class Chatroom extends AppCompatActivity {
     }
 
 
-
+    /**
+     * Initializes all Firebase components like FirebaseStorage, DatabaseReferences etc
+     */
     private void initializeFirebaseComponents(){
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mDatabaseReference = mFirebaseDatabase.getReference();
@@ -106,6 +108,9 @@ public class Chatroom extends AppCompatActivity {
         mFilesStorageReference = mFirebaseStorage.getReference().child("Files");
     }
 
+    /**
+     * Initializes all other components such as views, arraylists, adapters
+     */
     private void initializeComponents(){
         //Gets all data passed in from previous activity
         Intent currentIntent = getIntent();

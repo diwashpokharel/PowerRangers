@@ -49,6 +49,7 @@ public class InboxFragment extends Fragment {
     private DatabaseReference mChatroomDatabaseReference;
     private DatabaseReference mUserDatabaseReference;
     private ChildEventListener mChildEventListener;
+    private FirebaseUser user;
 
     private List<String> coursesEnrolledList;
     private List<String> privateChatsList;
@@ -81,6 +82,7 @@ public class InboxFragment extends Fragment {
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mChatroomDatabaseReference = mFirebaseDatabase.getReference().child("Chatrooms");
         mUserDatabaseReference = mFirebaseDatabase.getReference().child("User");
+        user = FirebaseAuth.getInstance().getCurrentUser();
 
         setRecyclerView();
         attachDatabaseReadListeners();
@@ -107,7 +109,24 @@ public class InboxFragment extends Fragment {
      * the inbox
      */
     private void attachDatabaseReadListeners() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        //Chatroom table listener that gets a list of all chatrooms whenever any
+        //new chatroom is added
+        mChatroomDatabaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                chatrooms = (Map<String, Object>) dataSnapshot.getValue();
+                attachUserTableListener();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    private void attachUserTableListener(){
         mUserDatabaseReference.child(user.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -171,20 +190,6 @@ public class InboxFragment extends Fragment {
                 }
 
 
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-        //Chatroom table listener that gets a list of all chatrooms whenever any
-        //new chatroom is added
-        mChatroomDatabaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                chatrooms = (Map<String, Object>) dataSnapshot.getValue();
             }
 
             @Override

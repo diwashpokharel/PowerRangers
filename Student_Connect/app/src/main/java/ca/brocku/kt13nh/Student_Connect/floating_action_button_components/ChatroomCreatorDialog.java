@@ -1,5 +1,11 @@
 package ca.brocku.kt13nh.Student_Connect.floating_action_button_components;
 
+/**
+ * Author: Goal Diggers
+ * Date: 3/20/2018
+ * The dialog that is shown when users click add button to create new private chatrooms
+ */
+
 import android.app.Dialog;
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
@@ -41,6 +47,10 @@ public class ChatroomCreatorDialog extends Dialog {
 
     private FirebaseUser currentUser;
 
+    /**
+     * Constructor for this Dialog that inherits from java's Dialog class
+     * @param context
+     */
     public ChatroomCreatorDialog(final Context context)
     {
         super(context);
@@ -50,6 +60,9 @@ public class ChatroomCreatorDialog extends Dialog {
     }
 
     @Override
+    /**
+     * Creates the activity as well as initializes  all components used in the dialog
+     */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_chatroom_creator);
@@ -75,7 +88,12 @@ public class ChatroomCreatorDialog extends Dialog {
     }
 
 
-    //Attaches listeners for the 2 buttons in this dialog
+    /**
+     * Attaches listeners to the 2 buttons in this dialog
+     * Cancel button dismisses the dialog, whereas the create button adds a private chatroom to the
+     * DB as long as the name specified is 1-16 chracters lng and users were entered in the correct
+     * format
+     */
     private void addListeners() {
         final EditText chatName = (EditText) findViewById(R.id.enterTitle);
         final MultiAutoCompleteTextView usersToAdd = (MultiAutoCompleteTextView)
@@ -97,7 +115,7 @@ public class ChatroomCreatorDialog extends Dialog {
                 if(!chatName.getText().toString().equals("")) {
                     if (usersToAddString.equals("") || usersToAddString.matches(
                             "(([a-z]+[\\s][a-z]+[\\s]*\\(" +
-                                    "[a-z][a-z][0-9][0-9][a-z][a-z]@brocku.ca\\))+,*)+")) {
+                                    "[a-z][a-z][0-9][0-9][a-z][a-z]@brocku.ca\\))+,*\\s*)+")) {
 
                         Map<String, Object> chatroomData = new HashMap<>();
                         chatroomData.put("ChatName", (Object) (chatName.getText().toString()));
@@ -119,20 +137,36 @@ public class ChatroomCreatorDialog extends Dialog {
                         //were invited to the chat
                         if (!usersToAdd.getText().toString().equals("")) {
                             String[] usersToAddList = usersToAdd.getText().toString().split(",");
+                            boolean usersExistInTable = true;
                             for (String userToAdd : usersToAddList) {
                                 if (!userToAdd.equals(" ")) {
                                     String userToAddEmail = userToAdd.split("\\(")[1]
                                             .split("\\)")[0];
 
+                                    boolean userIsInTable = false;
                                     for (Map<String, Object> user : users) {
                                         if (user.get("email").toString().equals(userToAddEmail)) {
                                             mUsersReference.child(user.get("userID").toString())
                                                     .child("private_chats")
                                                     .updateChildren(privateChatInfo);
+
+                                            userIsInTable = true;
                                         }
+                                    }
+                                    if(!userIsInTable){
+                                        usersExistInTable = false;
                                     }
                                 }
                             }
+
+                            //If some of the users entered are not in db, user is notified
+                            if(!usersExistInTable) {
+                                Toast.makeText(getContext(),
+                                        "Some of the users you have entered does not exist",
+                                                Toast.LENGTH_SHORT).show();
+
+                            }
+
                         }
 
                         dismiss();
@@ -152,7 +186,10 @@ public class ChatroomCreatorDialog extends Dialog {
         });
     }
 
-    //Attaches all Firebase DB listeners
+    /**
+     * Attaches listener to user table in DB that simply constructs a list of users to be used later
+     * Also adds users to adapter to be displayed in autocomplete view
+     */
     private void attachDatabaseListener(){
         mUsersReference.addChildEventListener(new ChildEventListener() {
             @Override

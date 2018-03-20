@@ -2,6 +2,7 @@ package ca.brocku.kt13nh.Student_Connect.drawer_components;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -10,7 +11,12 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -42,6 +48,7 @@ import ca.brocku.kt13nh.Student_Connect.R;
 
 public class Profile extends AppCompatActivity {
     //Only 1 button needed
+    Button changePassword;
     Button save;
     //The 6 textboxes needed.
     EditText email;
@@ -125,14 +132,17 @@ public class Profile extends AppCompatActivity {
                 if (hasFocus) {//currently in focus
                     if (ifValidInput(component, minSize, maxSize, inputType)) {
                         til.setError(null);
-                        checkOverallInput();
+                        checkNameInput();
+                        checkPasswordInput();
                     } else {
                         til.setError(setMessage(inputType));
-                        checkOverallInput();
+                        checkNameInput();
+                        checkPasswordInput();
                     }
                 } else {//Not focused, hide error.
                     til.setError(null);
-                    checkOverallInput();
+                    checkNameInput();
+                    checkPasswordInput();
                 }
             }
         });
@@ -141,17 +151,20 @@ public class Profile extends AppCompatActivity {
         component.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
                 textBoxTextChange(til, component, minSize, maxSize, inputType);
-                checkOverallInput();
+                checkNameInput();
+                checkPasswordInput();
             }
 
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 textBoxTextChange(til, component, minSize, maxSize, inputType);
-                checkOverallInput();
+                checkNameInput();
+                checkPasswordInput();
             }
 
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 textBoxTextChange(til, component, minSize, maxSize, inputType);
-                checkOverallInput();
+                checkNameInput();
+                checkPasswordInput();
             }
         });
     }
@@ -174,10 +187,10 @@ public class Profile extends AppCompatActivity {
                                    int maxSize, int inputType) {
         if (ifValidInput(component, minSize, maxSize, inputType)) {
             til.setError(null);
-            checkOverallInput();
+            checkNameInput();
         } else {
             til.setError(setMessage(inputType));
-            checkOverallInput();
+            checkNameInput();
         }
     }
 
@@ -230,35 +243,6 @@ public class Profile extends AppCompatActivity {
         return true;
     }
 
-    /**
-     * Checks if the current password entered matches the one stored in Firebase.
-     *
-     * @return True if the current password matches the one stored in the database, false otherwise.
-     */
-    private boolean checkIfCurrentPasswordMatches() {
-
-//        currentUser.get
-//
-//        userPassword.keepSynced(true);
-//        userPassword.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                //Check if current password matches the one in the database
-//                if (currentPassword.getText().toString().equals(dataSnapshot.getValue(String
-//                        .class))) {
-//                    isCorrectPassword = true;
-//                } else {
-//                    isCorrectPassword = false;
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//            }
-//        });
-//        return isCorrectPassword;
-        return true;
-    }
 
     /**
      * Initializing the components.
@@ -273,81 +257,32 @@ public class Profile extends AppCompatActivity {
 
         email.setEnabled(false);
         email.setClickable(false);
+        changePassword.setEnabled(false);
+        changePassword = (Button) findViewById(R.id.changePassword);
         save = (Button) findViewById(R.id.save);
         save.setEnabled(false);
         save.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                //The ChildEventListener is used to update the database.
-                ChildEventListener cel = new ChildEventListener() {
-                    @Override
-                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                        updateData(dataSnapshot);
-                    }
-
-                    @Override
-                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                    }
-
-                    @Override
-                    public void onChildRemoved(DataSnapshot dataSnapshot) {
-                    }
-
-                    @Override
-                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                };
-                userReference.addChildEventListener(cel);
+                updateData();
             }
         });
     }
 
     /**
      * Takes care of updating the database.
-     *
-     * @param dataSnapshot the database to be updated.
      */
-    private void updateData(DataSnapshot dataSnapshot) {
-        //data will store the needed entry in the database.
-        Map<String, Object> data = (Map<String, Object>) dataSnapshot.getValue();
-        String userEmail = (String) data.get("email");
+    private void updateData() {
         String newFirstName = firstName.getText().toString();
         String newLastName = lastName.getText().toString();
-        String newUpdatedPassword = newPassword.getText().toString();
 
-        //match the user to be updated based on the first 6 characters in the email textbox.
-        if (userEmail.toLowerCase().equals(email.getText().toString().substring(0, 6).toLowerCase
-                ())) {
-            userReference.child(userEmail).child("firstName").setValue(newFirstName);
-            userReference.child(userEmail).child("lastName").setValue(newLastName);
-            //If the current password entered is matches the one in the database and the user
-            // entered a new password which is valid. The password will be updated.
-            if (ifValidInput(newPassword, 8, 32, 2) && checkIfCurrentPasswordMatches()) {
-                userReference.child(userEmail).child("password").setValue(newUpdatedPassword);
-            } else if (ifValidInput(newPassword, 8, 32, 2) && !checkIfCurrentPasswordMatches()) {
-                //if current password entered does not match the one in the database, display an
-                // error massage.
-                AlertDialog alertDialog = new AlertDialog.Builder(Profile.this).create();
-                alertDialog.setTitle("Incorrect Password");
-                alertDialog.setMessage("Current password entered does not match the stored " +
-                        "password in the database.");
-                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
-                alertDialog.show();
-            }
-            updateTextboxes();
-        }
+        userReference.child("first_name").setValue(newFirstName);
+        userReference.child("last_name").setValue(newLastName);
+
+        Toast.makeText(Profile.this, "Your name has been updated in the database",
+                Toast.LENGTH_LONG).show();
+        updateTextboxes();
     }
 
     /**
@@ -356,23 +291,35 @@ public class Profile extends AppCompatActivity {
      *
      * @return True if all the input is valid, false otherwise.
      */
-    private boolean checkOverallInput() {
+    private boolean checkNameInput() {
         //will check if the save button should be enabled or not. I will make sure that the first
         // and last names are valid. For the passwords, if the current password, new password and
         // confirm passwords are empty, it is considered as valid. If at least one of them is not
         // empty, then all the three textboxes must have valid input.
         if (ifValidInput(firstName, 1, 32, 0)
-                && ifValidInput(lastName, 1, 32, 0)
-                && ((ifValidInput(currentPassword, 8, 32, 1)
-                && ifValidInput(newPassword, 8, 32, 2)
-                && ifValidInput(newPasswordConfirm, 8, 32, 3))
-                || (currentPassword.getText().toString().trim().length() == 0
-                && newPassword.getText().toString().trim().length() == 0
-                && newPasswordConfirm.getText().toString().trim().length() == 0))) {
+                && ifValidInput(lastName, 1, 32, 0)) {
             save.setEnabled(true);
             return true;
         } else {
             save.setEnabled(false);
+            return false;
+        }
+
+
+    }
+
+    private boolean checkPasswordInput(){
+        if((ifValidInput(currentPassword, 8, 32, 1)
+                && ifValidInput(newPassword, 8, 32, 2)
+                && ifValidInput(newPasswordConfirm, 8, 32, 3))
+                || (currentPassword.getText().toString().trim().length() == 0
+                && newPassword.getText().toString().trim().length() == 0
+                && newPasswordConfirm.getText().toString().trim().length() == 0)){
+            changePassword.setEnabled(true);
+            return true;
+        }
+        else{
+            changePassword.setEnabled(false);
             return false;
         }
     }
@@ -406,10 +353,6 @@ public class Profile extends AppCompatActivity {
      * updates the textboxes according.
      */
     private void updateTextboxes() {
-        //Get the email from the textbox.
-        //String e = email.getText().subSequence(0, 6).toString().toUpperCase();
-        //Get the user information based on the email.
-        //DatabaseReference user = FirebaseDatabase.getInstance().getReference(e);
         DatabaseReference userEmail = userReference.child("email");//Get the email stored.
         DatabaseReference userFirstName = userReference.child("first_name");//Get the first name stored.
         DatabaseReference userLastName = userReference.child("last_name");//Get the last name stored.
@@ -446,5 +389,58 @@ public class Profile extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
             }
         });
+    }
+
+    /**
+     * Listener for when change password button is clicked.
+     * Reauthenticates the users using built in Firebase method given the new password entered by
+     * the user
+     * @param view
+     */
+    public void changePasswordClicked(View view){
+        if(ifValidInput(newPassword, 8, 32, 2)) {
+            reauthenticateUser(view);
+        }
+    }
+
+    /**
+     * Reauthenticates the user with their new password.
+     * @param view
+     */
+    private void reauthenticateUser(View view){
+        final View profileView = view;
+        final String newUpdatedPassword = newPassword.getText().toString();
+
+        // Get auth credentials from the user for re-authentication.
+        AuthCredential credential = EmailAuthProvider
+                .getCredential(currentUser.getEmail(), currentPassword.getText().toString());
+
+        // Prompt the user to re-provide their sign-in credentials
+        currentUser.reauthenticate(credential)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            currentUser.updatePassword(newUpdatedPassword).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        Toast.makeText(profileView.getContext(),
+                                                "Password updated",
+                                                Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(profileView.getContext(),
+                                                "Error password not updated",
+                                                Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                        } else {
+                            Toast.makeText(profileView.getContext(),
+                                    "Error auth failed",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 }
