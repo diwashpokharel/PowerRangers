@@ -23,15 +23,17 @@ import ca.brocku.kt13nh.Student_Connect.login_reg_java_v2.activity_register;
 import ca.brocku.kt13nh.Student_Connect.base_interface_java_v3.NavBar;
 
 /**
- * Created by kevin on 2018-02-12.
+ * This is the main activity that will start upon launching our app. It will choose either to
+ * display the home page, or the login/registration pages for the user based on if they are currently
+ * logged into the app
  */
 
 public class MainActivity extends AppCompatActivity {
 
     private Button registerButton;
     private Button existingUserButton;
+    //firebase instances
     final FirebaseDatabase database = FirebaseDatabase.getInstance();
-    final DatabaseReference table_user = database.getReference("User");
     private FirebaseAuth authenticator = FirebaseAuth.getInstance();
     private FirebaseUser currUser = authenticator.getCurrentUser();
     String test;
@@ -59,40 +61,10 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
     }
     private void checkFirstLogin(){
-
+        //display the home screen if the user is already logged in
         if(isLoggedIn()) {
-//            table_user.addListenerForSingleValueEvent(new ValueEventListener() {
-//                @Override
-//                public void onDataChange(DataSnapshot dataSnapshot) {
-//
-//                    System.out.println("This is called");
-//                    String UID = currUser.getUid();
-//                    String first_login;
-//                    first_login = dataSnapshot.child(UID).child("first_login").getValue().toString();
-//                    test = first_login;
-//                    if(first_login.equals("false")) {
-//                        Intent activity_home = new Intent(MainActivity.this, NavBar.class);
-//                        startActivity(activity_home);
-//                    }
-//                    else{
-//                        Intent activity_course_register = new Intent(MainActivity.this, CourseRegisterPage.class);
-//                        startActivity(activity_course_register);
-//                    }
-//                }
-//
-//                @Override
-//                public void onCancelled(DatabaseError databaseError) {
-//
-//                }
-//            });
-            //if(first_login.equals("false")) {
-                Intent activity_home = new Intent(MainActivity.this, NavBar.class);
-                startActivity(activity_home);
-            //}
-            //else{
-              //  Intent activity_course_register = new Intent(MainActivity.this, CourseRegisterPage.class);
-                //startActivity(activity_course_register);
-            //}
+            Intent activity_home = new Intent(MainActivity.this, NavBar.class);
+            startActivity(activity_home);
         }
     }
 

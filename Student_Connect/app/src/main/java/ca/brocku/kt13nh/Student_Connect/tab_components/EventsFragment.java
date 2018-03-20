@@ -10,6 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.app.Fragment;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -19,13 +22,23 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import ca.brocku.kt13nh.Student_Connect.R;
+import ca.brocku.kt13nh.Student_Connect.drawer_components.HobbiesFragmentPage;
 
-
+/*
+* This is the class to be display for the tabs of "Events". This will sort the list based on which
+* events they have joined, and the date of the events.
+* */
 public class EventsFragment extends Fragment {
 
     private FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -38,7 +51,8 @@ public class EventsFragment extends Fragment {
     private FirebaseUser currUser = authenticator.getCurrentUser();
     private Events_adapter events_adapter;
     private View view;
-
+    private ArrayList<Map<String, String>> joined;
+    private ArrayList<Map<String, String>> notJoined;
     private String title;//String for tab title
 
     private static RecyclerView recyclerView;
@@ -88,42 +102,36 @@ public class EventsFragment extends Fragment {
      * Attaches listener to events table, add to list of events for user
      */
     private void attachDatabaseReadListener(){
-        if(mChildEventListener == null) {
-
-            mChildEventListener = new ChildEventListener() {
-                @Override
-                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                    load(dataSnapshot);
-                    System.out.println(dataSnapshot.getValue().toString());
-                    //update();
+        table_events.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                events_adapter.clear();
+                joined = new ArrayList<Map<String,String>>();
+                notJoined = new ArrayList<Map<String,String>>();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    load(snapshot);
                 }
-
-                @Override
-                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
+                for(Map<String, String> event: joined){
+                    events_adapter.addEventData(event);
                 }
-
-                @Override
-                public void onChildRemoved(DataSnapshot dataSnapshot) {
-
+                for(Map<String, String> event: notJoined){
+                    events_adapter.addEventData(event);
                 }
+                recyclerView.setAdapter(events_adapter);
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
-                @Override
-                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            };
-            table_events.addChildEventListener(mChildEventListener);
-        }
+            }
+        });
     }
 
 
+    /*
+    * Load all of the required data from the datasnapshot parameter into a map, and add that map
+    * to the list of joined or not joined depending on if they have already joined the event
+    * */
     private void load(DataSnapshot dataSnapshot){
-        //update();
         String eventID = dataSnapshot.getKey();
         String title = (String) dataSnapshot.child("title").getValue().toString();
         String date = (String) dataSnapshot.child("date").getValue().toString();
@@ -132,11 +140,8 @@ public class EventsFragment extends Fragment {
         String time = (String) dataSnapshot.child("time").getValue().toString();
         String email = (String) dataSnapshot.child("email").getValue().toString();
         String UID = currUser.getUid();
-
-        System.out.println(dataSnapshot.child("joined").getValue().toString());
-
+        //create a map to hold all of the event information
         Map<String, String> eventData = new HashMap<>();
-
         eventData.put("eventID", eventID);
         eventData.put("title", title);
         eventData.put("date", date);
@@ -144,19 +149,41 @@ public class EventsFragment extends Fragment {
         eventData.put("location", location);
         eventData.put("time", time);
         eventData.put("email",email);
-        //System.out.println("UID: "+UID);
-        //System.out.println("Has child: "+dataSnapshot.child("joined").hasChild(UID));
         //if this is the creator then auto matically join
         if(dataSnapshot.child("joined").hasChild(UID)){
             eventData.put("joined","true");
+            joined.add(eventData);
+            sort(joined);
         }
+        //if user has not already joined the event
         else {
             eventData.put("joined","false");
+            notJoined.add(eventData);
+            sort(notJoined);
         }
-
-        events_adapter.addEvent(eventData);
-        recyclerView.setAdapter(events_adapter);
-
     }
 
+    /*
+    * Array list to sort the maps inside of the arraylist
+    * */
+    private void sort(ArrayList<Map<String,String>> map){
+
+        Collections.sort(map, new Comparator<Map>() {
+            @Override
+            public int compare(Map map1, Map map2) {
+                String date1String = map1.get("date").toString();
+                String date2String = map2.get("date").toString();
+                try {
+                    Date date1 = new SimpleDateFormat("dd/MM/yyyy").parse(date1String);
+                    Date date2 = new SimpleDateFormat("dd/MM/yyyy").parse(date2String);
+                    return(date1.compareTo(date2));
+                }
+                catch(ParseException ex){
+                    throw new IllegalArgumentException(ex);
+                }
+
+            }
+        });
+
+    }
 }

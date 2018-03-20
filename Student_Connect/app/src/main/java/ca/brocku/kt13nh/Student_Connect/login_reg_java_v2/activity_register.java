@@ -27,7 +27,9 @@ import com.rengwuxian.materialedittext.MaterialEditText;
 import ca.brocku.kt13nh.Student_Connect.R;
 
 /**
- * Created by Tram on 10/11/2017.
+ * THis class is for the users to register their account. Upon registration a verification code
+ * should be sent to their email where that needs to be authenticated in order for the
+ * account to be active.
  */
 
 public class activity_register extends AppCompatActivity {
@@ -65,22 +67,28 @@ public class activity_register extends AppCompatActivity {
                         String confirmEmail = confirmEmailText.getText().toString().toLowerCase();
                         String password = passwordText.getText().toString();
                         String confirmPassword = confirmPasswordText.getText().toString();
+                        //check to see if first and last name contain only letters
                         if(!firstName.matches("^[a-zA-Z]+$") || !lastName.matches("^[a-zA-Z]+$") ){
                             Toast.makeText(activity_register.this, "First name and Last name can only include letters!", Toast.LENGTH_SHORT).show();
                         }
+                        //check to see if it is a brocku email
                         else if(!email.matches("^[a-zA-Z0-9._%+-]+@brocku.ca$")){
                             Toast.makeText(activity_register.this, "Please enter a valid email.", Toast.LENGTH_SHORT).show();
                         }
+                        //check to see if emails are equal
                         else if(!email.equals(confirmEmail)){
                             Toast.makeText(activity_register.this, "Emails do not match", Toast.LENGTH_SHORT).show();
                         }
+                        //check to see if passwords are the same
                         else if(!password.equals(confirmPassword)){
                             Toast.makeText(activity_register.this ,"Passwords do not match", Toast.LENGTH_SHORT).show();
                         }
-                        else if(password.length()<5){
-                            Toast.makeText(activity_register.this, "Your password must have at least 6 characters.", Toast.LENGTH_SHORT).show();
+                        //check to see if password is at least 8 characters
+                        else if(password.length()<8){
+                            Toast.makeText(activity_register.this, "Your password must have at least 8 characters.", Toast.LENGTH_SHORT).show();
                         }
                         else{
+                            //attempt to register
                             final ProgressDialog progressDialog = new ProgressDialog(activity_register.this);
                             progressDialog.setMessage("Registering, Please Wait...");
                             progressDialog.show();
@@ -137,6 +145,6 @@ public class activity_register extends AppCompatActivity {
         table_user.child(user.getUid().toString()).child("qa").setValue("");
         table_user.child(user.getUid().toString()).child("events").setValue("");
         table_user.child(user.getUid().toString()).child("private_chats").setValue("");
-        table_user.child(user.getUid().toString()).child("first_login").setValue("false");
+        table_user.child(user.getUid().toString()).child("first_login").setValue("true");
     }
 }

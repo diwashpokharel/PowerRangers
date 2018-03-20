@@ -23,7 +23,7 @@ import ca.brocku.kt13nh.Student_Connect.chatroom_components.Chatroom;
 
 public class RecyclerView_Adapter extends
         RecyclerView.Adapter<DemoViewHolder> {
-    private List<Map<String, String>> arrayList;
+    private List<Map<String, Object>> arrayList;
     private Context context;
     private OnRecyclerClickListener onRecyclerClickListener;
 
@@ -39,8 +39,12 @@ public class RecyclerView_Adapter extends
 
     }
 
-    public void addChatroom(Map<String, String> chatroomData){
+    public void addChatroom(Map<String, Object> chatroomData){
         arrayList.add(chatroomData);
+    }
+
+    public void clearChatrooms(){
+        arrayList.clear();
     }
 
     @Override
@@ -55,7 +59,7 @@ public class RecyclerView_Adapter extends
         final DemoViewHolder mainHolder = (DemoViewHolder) holder;
         //Setting text over textview
         // mainHolder.bind(arrayList.get(position), listener);
-        mainHolder.title.setText(arrayList.get(position).get("ChatName"));
+        mainHolder.title.setText(arrayList.get(position).get("ChatName").toString());
 
     }
 
@@ -96,63 +100,38 @@ public class RecyclerView_Adapter extends
             @Override
             public void onClick(View view) {
                 image=(ImageView) view.findViewById(R.id.iv_image);
-
-                //   image.setFavorite();
-                System.out.println("This is my number " + k);
-                //     image.setImageResource(R.mipmap.pic);
-
-                if(k==0 || k==1 || k==2)
-                    myfav1=false;
-
-                if(!myfav1){
-                    myfav1=true;
-                    image.setImageResource(R.mipmap.pic);
-                }
-
-                else
-                {
-                    myfav1=false;
-                    image.setImageResource(R.mipmap.white);
-                }
-                int pol[]={0,0,0};
-                if(k==0)
-                    pol[0]=0;
-                else if(k==1)
-                    pol[1]=1;
-                else if (k==2)
-                    pol[2]=2;
+                int position = mainHolder.getLayoutPosition();
+                Map<String, Object> chatroom = arrayList.get(position);
+                Intent chatroomIntent = new Intent(context, Chatroom.class);
+                chatroomIntent.putExtra("chatID", (String)chatroom.get("ChatID"));
+                chatroomIntent.putExtra("chatroomName", (String)chatroom.get("ChatName"));
+                chatroomIntent.putExtra("isPublic", (boolean)chatroom.get("isPublic"));
+                chatroomIntent.putExtra("admin", (String)chatroom.get("admin"));
+                context.startActivity(chatroomIntent);
 
             }
         });
 
-
+        //Opens the chatroom activity and provides all the data for the chatroom
+        //such as chatID, chatName, etc.
         final View.OnClickListener mOnClickListener = new View.OnClickListener(){
 
             @Override
             public void onClick(View view)
             {
                 int position = mainHolder.getLayoutPosition();
-                Map<String, String> chatroom = arrayList.get(position);
+                Map<String, Object> chatroom = arrayList.get(position);
                 Intent chatroomIntent = new Intent(context, Chatroom.class);
-                chatroomIntent.putExtra("chatID", chatroom.get("ChatID"));
-                chatroomIntent.putExtra("chatroomName", chatroom.get("ChatName"));
+                chatroomIntent.putExtra("chatID", (String)chatroom.get("ChatID"));
+                chatroomIntent.putExtra("chatroomName", (String)chatroom.get("ChatName"));
+                chatroomIntent.putExtra("isPublic", (boolean)chatroom.get("isPublic"));
+                chatroomIntent.putExtra("admin", (String)chatroom.get("admin"));
                 context.startActivity(chatroomIntent);
 
             }};
 
-        final View.OnLongClickListener longClickListener= new View.OnLongClickListener(){
 
-            @Override
-            public boolean onLongClick(View view) {
-                //    showChangeLangDialog();
-                final Dialog dialog = new Dialog(context);
-                dialog.setContentView(R.layout.menu_add);
-                dialog.show();
-                return false;
-            }
-        };
 
-        mainGroup.setOnLongClickListener(longClickListener);
         mainGroup.setOnClickListener(mOnClickListener);
 
 // 13805 ////////////////////////////////

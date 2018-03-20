@@ -1,4 +1,5 @@
 package ca.brocku.kt13nh.Student_Connect.base_interface_java_v3;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -14,6 +15,9 @@ import android.view.MenuItem;
 import com.google.firebase.auth.FirebaseAuth;
 
 import ca.brocku.kt13nh.Student_Connect.R;
+import ca.brocku.kt13nh.Student_Connect.drawer_components.CourseFragmentPage;
+import ca.brocku.kt13nh.Student_Connect.drawer_components.HobbiesFragmentPage;
+import ca.brocku.kt13nh.Student_Connect.drawer_components.Profile;
 
 /**
  * Created by kevin on 2018-01-18.
@@ -70,7 +74,6 @@ public class NavBar extends AppCompatActivity
     }
 
     //For the navbar options, screen should display what is selected.
-    //incomplete, still require some pages
     private void displaySelectedScreen(int itemId){
 
         Fragment fragment = null;
@@ -79,11 +82,15 @@ public class NavBar extends AppCompatActivity
             case R.id.nav_home:
                 fragment = new Home();
                 break;
-            case R.id.nav_aboutus:
-                //fragment = new aboutPage();
+            case R.id.nav_profile:
+                Intent profileIntent = new Intent(NavBar.this, Profile.class);
+                startActivity(profileIntent);
                 break;
-            case R.id.nav_submissionInfo:
-                //fragment = new SubmissionInfo();
+            case R.id.nav_courses:
+                fragment = new CourseFragmentPage();
+                break;
+            case R.id.nav_hobbies:
+                fragment = new HobbiesFragmentPage();
                 break;
             case R.id.nav_signout:
                 FirebaseAuth.getInstance().signOut();

@@ -1,8 +1,10 @@
 package ca.brocku.kt13nh.Student_Connect.tab_components;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,14 +16,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import ca.brocku.kt13nh.Student_Connect.R;
@@ -42,7 +48,15 @@ public class InboxFragment extends Fragment {
 
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mChatroomDatabaseReference;
+    private DatabaseReference mUserDatabaseReference;
     private ChildEventListener mChildEventListener;
+    private FirebaseUser user;
+
+    private List<String> coursesEnrolledList;
+    private List<String> privateChatsList;
+    private List<String> eventsJoinedList;
+    private List<String> hobbiesList;
+    private Map<String, Object> chatrooms;
 
     public interface OnItemClickListener {
         public void onItemClick(View view, int position);
@@ -51,6 +65,7 @@ public class InboxFragment extends Fragment {
     }
 
     //public InboxFragment(){}
+    @SuppressLint("ValidFragment")
     public InboxFragment(String title) {
         this.title = title;//Setting tab title
     }
@@ -58,17 +73,25 @@ public class InboxFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                        Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.dummy_fragment, container, false);
+
+        coursesEnrolledList = new ArrayList<>();
+        privateChatsList = new ArrayList<>();
+        eventsJoinedList = new ArrayList<>();
+        hobbiesList = new ArrayList<>();
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mChatroomDatabaseReference = mFirebaseDatabase.getReference().child("Chatrooms");
+        mUserDatabaseReference = mFirebaseDatabase.getReference().child("User");
+        user = FirebaseAuth.getInstance().getCurrentUser();
 
         setRecyclerView();
-        attachDatabaseReadListener();
+        attachDatabaseReadListeners();
         return view;
 
     }
+
     //Setting recycler view
     private void setRecyclerView() {
 
@@ -87,44 +110,105 @@ public class InboxFragment extends Fragment {
      * Attaches listener to chatrooms table. When a chatroom is added, that chatroom appears in
      * the inbox
      */
-    private void attachDatabaseReadListener(){
-        if(mChildEventListener == null) {
-            mChildEventListener = new ChildEventListener() {
-                @Override
-                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                    String chatID = dataSnapshot.getKey();
-                    String chatName = (String) dataSnapshot.child("ChatName").getValue().toString();
-                    Map<String, String> chatroomData = new HashMap<>();
-                    chatroomData.put("ChatID", chatID);
-                    chatroomData.put("ChatName", chatName);
-                    chatroomListAdapter.addChatroom(chatroomData);
-                    recyclerView.setAdapter(chatroomListAdapter);
-                }
+    private void attachDatabaseReadListeners() {
+        //Chatroom table listener that gets a list of all chatrooms whenever any
+        //new chatroom is added
+        mChatroomDatabaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                chatrooms = (Map<String, Object>) dataSnapshot.getValue();
+                attachUserTableListener();
+            }
 
-                @Override
-                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
-                @Override
-                public void onChildRemoved(DataSnapshot dataSnapshot) {
-                }
+            }
+        });
 
-                @Override
-                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            };
-            mChatroomDatabaseReference.addChildEventListener(mChildEventListener);
-        }
     }
 
+    private void attachUserTableListener(){
+        mUserDatabaseReference.child(user.getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Map<String, String> enrolledMapping = new HashMap<>();
+
+                //Gets all enrolled courses, events joined, hobbies added and private chats joined for
+                //this user from the DB
+                if(!dataSnapshot.child("enrolled").getValue().toString().equals(""))
+                    enrolledMapping= (Map<String, String>) dataSnapshot.child("enrolled").getValue();
+
+                Map<String, String> privateChatsMapping = new HashMap<>();
+                if(!dataSnapshot.child("private_chats").getValue().toString().equals(""))
+                    privateChatsMapping = (Map<String, String>) dataSnapshot.child("private_chats").getValue();
+
+                Map<String, String> joinedEventsMapping = new HashMap<>();
+                if(!dataSnapshot.child("events").getValue().toString().equals("")) {
+                    joinedEventsMapping = (Map<String, String>) dataSnapshot.child("events").getValue();
+                }
+                Map<String, String> hobbiesMapping = (Map<String, String>) dataSnapshot.child("hobbies").getValue();
+                if(!dataSnapshot.child("events").getValue().toString().equals("")) {
+                    hobbiesMapping = (Map<String, String>) dataSnapshot.child("hobbies").getValue();
+                }
+                //Makes list of enrolled courseIDs, joined private chat IDs, joined event IDs,
+                // and hobbies
+                coursesEnrolledList.clear();
+                for (String courseID : enrolledMapping.keySet()) {
+                    coursesEnrolledList.add(courseID);
+                }
+                privateChatsList.clear();
+                for (String privateChat : privateChatsMapping.keySet()) {
+                    privateChatsList.add(privateChat);
+                }
+                eventsJoinedList.clear();
+                for (String event : joinedEventsMapping.keySet()) {
+                    eventsJoinedList.add(event);
+                }
+                hobbiesList.clear();
+                for (String hobby : hobbiesMapping.keySet()) {
+                    hobbiesList.add(hobby);
+                }
+
+                chatroomListAdapter.clearChatrooms();
+                for (Map.Entry<String, Object> chatroom : chatrooms.entrySet()) {
+                    String chatID = chatroom.getKey();
+                    Map<String, Object> chatroomObject = (Map<String, Object>) chatroom.getValue();
+                    String chatName = (String) chatroomObject.get("ChatName");
+                    boolean isPublic = (boolean) chatroomObject.get("isPublic");
+                    String admin = "";
+                    if(!isPublic)
+                        admin = (String) chatroomObject.get("admin");
+
+                    //Only displays the chatroom if user has enrolled in the course/joined the
+                    // event/been invited to the private chat
+                    if (coursesEnrolledList.contains(chatName) || privateChatsList.contains(chatID)
+                            || eventsJoinedList.contains(chatID) || hobbiesList.contains(chatID)) {
+                        Map<String, Object> chatroomData = new HashMap<>();
+                        chatroomData.put("ChatID", chatID);
+                        chatroomData.put("ChatName", chatName);
+                        chatroomData.put("isPublic", isPublic);
+                        chatroomData.put("admin", admin);
+                        chatroomListAdapter.addChatroom(chatroomData);
+                        recyclerView.setAdapter(chatroomListAdapter);
+                    }
+                }
 
 
+            }
 
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
+            }
+        });
 
+    }
 }
+
+
+
+
+
+
+

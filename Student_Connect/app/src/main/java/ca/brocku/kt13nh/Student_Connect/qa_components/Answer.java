@@ -5,7 +5,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Created by pc-user on 3/12/2018.
+ * Author: Goal Diggers
+ * Class that is used to encapsulate answer data so that it can be saved to the database.
  */
 
 public class Answer {
@@ -16,9 +17,20 @@ public class Answer {
     private String fileUrl;
     private String time;
 
+    /**
+     * Default constructor for Answer object
+     */
     public Answer(){
     }
 
+    /**
+     * Constructor for Answer bject that is used to encapsulate Answer data
+     * @param explanation
+     * @param user
+     * @param photoUrl
+     * @param fileName
+     * @param fileUrl
+     */
     public Answer(String explanation, String user, String photoUrl, String fileName, String fileUrl ) {
         this.explanation = explanation;
         this.user = user;
@@ -26,9 +38,14 @@ public class Answer {
         this.fileName = fileName;
         this.fileUrl = fileUrl;
 
-        DateFormat dateFormat = new SimpleDateFormat("hh:mm");
+        DateFormat dateFormat = new SimpleDateFormat("h:mm a");
         this.time = dateFormat.format(new Date());
     }
+
+    /**
+     * Getter and setter methods for the various attributes of an answer object
+     * @return
+     */
 
     public String getExplanation() {
         return explanation;
@@ -54,16 +71,8 @@ public class Answer {
         return photoUrl;
     }
 
-    public void setPhotoUrl(String photoUrl) {
-        this.photoUrl = photoUrl;
-    }
-
     public String getFileUrl() {
         return fileUrl;
-    }
-
-    public void setFileUrl(String fileUrl) {
-        this.fileUrl = fileUrl;
     }
 
     public String getFileName() {

@@ -39,10 +39,12 @@ public class HobbiesRegisterPage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hobbies_register_page);
+        //initialize the database
         table_user_hobbies = mFirebaseDatabase.getReference().child("User").child(currUser.getUid()).child("hobbies");
         table_user_enrolled = mFirebaseDatabase.getReference().child("User").child(currUser.getUid()).child("enrolled");
         table_courses = mFirebaseDatabase.getReference().child("Courses");
         table_user = mFirebaseDatabase.getReference().child("User");
+        //set toolbar and titles
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Student Connect");
         setSupportActionBar(toolbar);
@@ -50,6 +52,7 @@ public class HobbiesRegisterPage extends AppCompatActivity {
 
     }//onCreate
 
+    //add all of the listeners for the check boxes and buttons -- quite lengthy
     private void addListeners(){
 
         Button next = (Button) findViewById(R.id.nextButton);
@@ -134,6 +137,7 @@ public class HobbiesRegisterPage extends AppCompatActivity {
                 boolean poetry = checkPoetry.isChecked();
                 boolean piano = checkPiano.isChecked();
                 boolean reading = checkReading.isChecked();
+                //check to see if any of these are checked. if checked then add to the list
                 if(acting)
                     list.add(checkActing.getText().toString());
                 if(sculp)
@@ -185,11 +189,14 @@ public class HobbiesRegisterPage extends AppCompatActivity {
                 if(reading)
                     list.add(checkReading.getText().toString());
                 writeDBInformation();
-                //go to what activity/page from here kevin?*****************************************************************************************************************************
             }
         });
     }
 
+    /*
+    * Method to write to firebase all of the hobbies that the user is interested in based on if
+    * the checkboxes are checked
+    * */
     private void writeDBInformation(){
         final String c1 = getIntent().getStringExtra("course1");
         final String c2 = getIntent().getStringExtra("course2");
@@ -197,52 +204,15 @@ public class HobbiesRegisterPage extends AppCompatActivity {
         final String c4 = getIntent().getStringExtra("course4");
         final String c5 = getIntent().getStringExtra("course5");
         final String c6 = getIntent().getStringExtra("course6");
-
+        //write all of the hobbies into the user's table.
         for(int i=0;i<list.size();i++){
             table_user_hobbies.child(list.get(i).toString()).setValue("");
         }
-        table_courses.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(!c1.trim().isEmpty()) {
-                    String courseName = dataSnapshot.child(c1).child("CourseName").getValue().toString();
-                    table_user_enrolled.child(c1).setValue(courseName);
-                }
-                if(!c2.trim().isEmpty()){
-                    String courseName = dataSnapshot.child(c1).child("CourseName").getValue().toString();
-                    table_user_enrolled.child(c2).setValue(courseName);
 
-                }
-                if(!c3.trim().isEmpty()){
-                    String courseName = dataSnapshot.child(c1).child("CourseName").getValue().toString();
-                    table_user_enrolled.child(c3).setValue(courseName);
-
-                }
-                if(!c4.trim().isEmpty()){
-                    String courseName = dataSnapshot.child(c1).child("CourseName").getValue().toString();
-                    table_user_enrolled.child(c4).setValue(courseName);
-
-                }
-                if(!c5.trim().isEmpty()){
-                    String courseName = dataSnapshot.child(c1).child("CourseName").getValue().toString();
-                    table_user_enrolled.child(c5).setValue(courseName);
-
-                }
-                if(!c6.trim().isEmpty()){
-                    String courseName = dataSnapshot.child(c1).child("CourseName").getValue().toString();
-                    table_user_enrolled.child(c6).setValue(courseName);
-                }
-                table_user.child(currUser.getUid()).child("first_login").setValue("false");
-                Intent activity_home = new Intent(HobbiesRegisterPage.this, NavBar.class);
-                startActivity(activity_home);
-                finish();
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
+        table_user.child(currUser.getUid()).child("first_login").setValue("false");
+        Intent activity_home = new Intent(HobbiesRegisterPage.this, NavBar.class);
+        startActivity(activity_home);
+        finish();
     }
 
 

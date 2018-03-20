@@ -159,6 +159,10 @@ public class NewQuestion extends Activity{
 
     }//addListenerOnButton
 
+    /**
+     * Adds listener to enrolled section in User's table that gets the courses the current user is
+     * enrolled in and displays them in the dropdown
+     */
     private void initDropDownCourses(){
 
         final String UID = currUser.getUid();

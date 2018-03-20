@@ -29,6 +29,7 @@ import ca.brocku.kt13nh.Student_Connect.tab_components.EventsFragment;
 
 
 /**
+ * Author: Goal Diggers
  * This class is used for the pop up window when user wants to create a new Event
  * Able to use FragmentActiviy instead of Fragment for Nav Drawer?
  *
@@ -36,14 +37,13 @@ import ca.brocku.kt13nh.Student_Connect.tab_components.EventsFragment;
 
 public class NewEvent extends AppCompatActivity{
 
-    private Spinner spinnerEvents;
     private DatePicker date;
     private TimePicker time;
     private EditText editTitleField, editDescriptionField, editLocationField;
-    private CheckBox anonymousCheckBox;
     private FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
     private DatabaseReference table_events = mFirebaseDatabase.getReference().child("Events");
     private DatabaseReference table_user = mFirebaseDatabase.getReference().child("User");
+    private DatabaseReference table_chatrooms = mFirebaseDatabase.getReference().child("Chatrooms");
     private FirebaseAuth authenticator= FirebaseAuth.getInstance();
     private FirebaseUser currUser = authenticator.getCurrentUser();
     @Override
@@ -70,7 +70,6 @@ public class NewEvent extends AppCompatActivity{
 
         //for each part of form (Spinner, buttons, edittext fields, checkbox)
         //spinnerEvents = (Spinner) findViewById(R.id.spinnerEvents);
-
         Button createButton = (Button) findViewById(R.id.createButton);
         Button cancelButton = (Button) findViewById(R.id.cancelButton);
 
@@ -80,8 +79,6 @@ public class NewEvent extends AppCompatActivity{
         editTitleField = (EditText) findViewById(R.id.editEventTitle);
         editDescriptionField = (EditText) findViewById(R.id.editEventDescription);
         editLocationField = (EditText) findViewById(R.id.editLocation);
-
-        //anonymousCheckBox = (CheckBox) findViewById(R.id.checkBoxEvent);
 
         //Add listener on cancel button
         cancelButton.setOnClickListener(new View.OnClickListener(){
@@ -120,7 +117,7 @@ public class NewEvent extends AppCompatActivity{
                 final Map<String, String> eventData = new HashMap<>();
 
                 if(!eventTitle.equals("")&&!location.equals("")) {
-                    table_user.addValueEventListener(new ValueEventListener() {
+                    table_user.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(final DataSnapshot dataSnapshot) {
                             final String firstName = dataSnapshot.child(UID).child("first_name").getValue().toString();
@@ -135,8 +132,9 @@ public class NewEvent extends AppCompatActivity{
                             eventData.put("email", email);
                             eventData.put("creator", fullName);
                             eventData.put("joined","");
+                            addChatRoom(eventID,eventTitle,"true");
                             table_events.child(eventID).setValue(eventData);
-                            table_events.child(eventID).child("joined").child(UID).setValue(fullName);
+                            table_events.child(eventID).child("joined").child(UID).setValue(email);
                             table_user.child(UID).child("events").child(eventID).setValue(eventTitle);
                             Toast.makeText(NewEvent.this, "Event created!", Toast.LENGTH_SHORT).show();
 
@@ -156,5 +154,12 @@ public class NewEvent extends AppCompatActivity{
         });
 
     }//addListenerOnButton
+
+    private void addChatRoom(String eventID, String title, String isPublic){
+        final Map<String, String> eventData = new HashMap<>();
+        eventData.put("ChatName",title);
+        eventData.put("isPublic",isPublic);
+        table_chatrooms.child(eventID).setValue(eventData);
+    }
 
 }//PopUpAdd

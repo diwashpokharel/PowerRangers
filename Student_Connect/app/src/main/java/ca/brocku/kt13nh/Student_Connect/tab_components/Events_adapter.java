@@ -30,39 +30,33 @@ public class Events_adapter extends
         this.arrayList = new ArrayList<>();
     }
 
-    public void addEvent(Map<String, String> eventData) {
-        int index = arrayList.size();
-        String joined = eventData.get("joined");
-        System.out.println("joined: "+joined);
-        if(joined.equals("true")){
-            arrayList.add(0,eventData);
+    public void addAll(ArrayList<Map> list){
+
+        for(int i=0;i<list.size();i++){
+            String joined = list.get(i).get("joined").toString();
+
         }
-        else {
-            arrayList.add(eventData);
-            System.out.println(arrayList.size());
-        }
-        //       if(index!=0) {
-//           while(index!=0) {
-//               if (arrayList.get(index - 1).get("joined").equals("false")&&joined.equals("true")) {
-//                   index--;
-//               } else {
-//                   break;
-//               }
-//           }
-//           arrayList.add(index,eventData);
-//       }
-//       else {
-//           System.out.println("else");
-//           arrayList.add(eventData);
-//       }
+
     }
 
+    public void clear(){
+        arrayList.clear();
+    }
+
+    //add the eventdata into the arraylist to hold all of the events
+    public void addEventData(Map<String, String> eventData){
+        arrayList.add(eventData);
+    }
+
+
+
+    //return items in the arraylist
     @Override
     public int getItemCount() {
         return (null != arrayList ? arrayList.size() : 0);
 
     }
-
+    //set the title and date of the card holders in the Events fragment
     @Override
     public void onBindViewHolder(EventsCardHolder holder,
                                  int position) {
@@ -74,6 +68,10 @@ public class Events_adapter extends
         mainHolder.date.setText(arrayList.get(position).get("date"));
     }
 
+    /*
+     *set the on click listeners and start the event activity upon the click while also
+     *transferring event information into the next inten
+     */
     @Override
     public EventsCardHolder onCreateViewHolder(
             ViewGroup viewGroup, int viewType) {
@@ -92,7 +90,7 @@ public class Events_adapter extends
             @Override
             public void onClick(View view) {
                 int position =mainHolder.getLayoutPosition();
-
+                //create map and transfer event data to the next activity
                 Map<String, String> event = arrayList.get(position);
                 Intent eventIntent = new Intent(context, Event.class);
                 eventIntent.putExtra("eventID", event.get("eventID"));
@@ -109,20 +107,6 @@ public class Events_adapter extends
 
 
         };
-
-        final View.OnLongClickListener longClickListener= new View.OnLongClickListener(){
-
-            @Override
-            public boolean onLongClick(View view) {
-                //    showChangeLangDialog();
-                final Dialog dialog = new Dialog(context);
-                dialog.setContentView(R.layout.menu_add);
-                dialog.show();
-                return false;
-            }
-        };
-
-        mainGroup.setOnLongClickListener(longClickListener);
         mainGroup.setOnClickListener(mOnClickListener);
 
 

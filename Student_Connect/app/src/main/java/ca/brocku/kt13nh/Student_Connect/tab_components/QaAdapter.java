@@ -59,13 +59,14 @@ public class QaAdapter extends
 
 
         final QaViewHolder mainHolder = (QaViewHolder) holder;
-        //Setting text over textview
-        // mainHolder.bind(arrayList.get(position), listener);
         mainHolder.title.setText(arrayList.get(position).get("title"));
         mainHolder.course.setText(arrayList.get(position).get("course"));
     }
 
 
+    /*
+    * set the view onclick listeners and make sure they are transferring data correctly
+    * */
     @Override
     public QaViewHolder onCreateViewHolder(
             ViewGroup viewGroup, int viewType) {
@@ -79,6 +80,8 @@ public class QaAdapter extends
                 return super.toString();
             }
         };
+        //on click listener to create a map and send that data to the Q/A intent to be user to
+        //display the information for the intent to use
         final View.OnClickListener mOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -96,20 +99,6 @@ public class QaAdapter extends
 
 
         };
-
-        final View.OnLongClickListener longClickListener = new View.OnLongClickListener() {
-
-            @Override
-            public boolean onLongClick(View view) {
-                //    showChangeLangDialog();
-                final Dialog dialog = new Dialog(context);
-                dialog.setContentView(R.layout.menu_add);
-                dialog.show();
-                return false;
-            }
-        };
-
-        mainGroup.setOnLongClickListener(longClickListener);
         mainGroup.setOnClickListener(mOnClickListener);
 
 
