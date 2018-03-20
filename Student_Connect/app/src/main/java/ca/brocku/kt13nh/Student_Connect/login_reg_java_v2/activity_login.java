@@ -25,7 +25,10 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.provider.FirebaseInitProvider;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
+import ca.brocku.kt13nh.Student_Connect.MainActivity;
 import ca.brocku.kt13nh.Student_Connect.R;
+import ca.brocku.kt13nh.Student_Connect.base_interface_java_v3.NavBar;
+import ca.brocku.kt13nh.Student_Connect.first_login_components.CourseRegisterPage;
 
 /*
 * Login functions for Student connect
@@ -77,7 +80,7 @@ public class activity_login extends AppCompatActivity {
                     //attempt to sign in with user credentials
                     table_user.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
+                        public void onDataChange(final DataSnapshot dataSnapshot) {
 
                             mAuth.signInWithEmailAndPassword(email, password)
                                     .addOnCompleteListener(activity_login.this, new OnCompleteListener<AuthResult>() {
@@ -86,6 +89,16 @@ public class activity_login extends AppCompatActivity {
                                             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
                                             if (task.isSuccessful()&&user.isEmailVerified()) {
+                                                Toast.makeText(activity_login.this, "Welcome!", Toast.LENGTH_LONG).show();
+                                                String first_login =dataSnapshot.child(user.getUid()).child("first_login").getValue().toString();
+                                                if(first_login.equals("true")){
+                                                    Intent activity_course_register = new Intent(activity_login.this, CourseRegisterPage.class);
+                                                    startActivity(activity_course_register);
+                                                }
+                                                else{
+                                                    Intent activity_home = new Intent(activity_login.this, NavBar.class);
+                                                    startActivity(activity_home);
+                                                }
                                                 //return to the home screen if sign in is complete
                                                 finish();
                                             }
@@ -97,7 +110,7 @@ public class activity_login extends AppCompatActivity {
                                             }
                                             else {
                                                 // If sign in fails, display a message to the user.
-                                               Toast.makeText(activity_login.this, "Incorrect login or password!", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(activity_login.this, "Incorrect login or password!", Toast.LENGTH_SHORT).show();
                                             }
                                             //dismiss dialog
                                             progressDialog.dismiss();

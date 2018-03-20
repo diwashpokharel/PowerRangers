@@ -7,12 +7,6 @@
         <item name="colorAccent">@color/darkgrey</item>
     </style>
 
-    <style name="RoomTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorPrimary">#212121</item>
-        <item name="colorPrimaryDark">#303F9F</item>
-        <item name="colorAccent">@color/darkgrey</item>
-    </style>
-
     <style name="Toolbar" parent="Theme.AppCompat">
 
         <item name = "android:actionMenuTextColor">@android:color/white</item>
@@ -23,7 +17,15 @@
         <item name="android:layout_weight">1</item>
         <item name="android:background">@drawable/ripple</item>
     </style>
+    <style parent="@style/Theme.AppCompat.Light.DarkActionBar" name="RoomTheme">
 
+    <item name="colorAccent">@color/darkgrey</item>
+
+    <item name="colorPrimary">#ff000000</item>
+
+    <item name="colorPrimaryDark">#ff000000</item>
+
+    </style>
     <style name="button2" parent="android:Widget.Button">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
@@ -32,9 +34,8 @@
     </style>
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
-    <!-- Custom text size -->
-    <style name="LargerTextLabel" parent="TextAppearance.Design.Hint">
-        <item name="android:textSize">20sp</item>
+    <style name="AppTheme.CustomPopUpTheme">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowCloseOnTouchOutside">false</item>
     </style>
 </resources>

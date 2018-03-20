@@ -1,52 +1,27 @@
 package ca.brocku.kt13nh.Student_Connect.chatroom_components;
 
-/**
- * Created by pc-user on 3/11/2018.
- */
-
-import java.text.DateFormat;
-import java.text.FieldPosition;
-import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Message {
-
-    private String text;
-    private String name;
-    private String photoUrl;
     private String fileName;
     private String fileUrl;
+    private String name;
+    private String photoUrl;
+    private String text;
     private String time;
-
-    /**
-     * Default constructor
-     */
-    public Message(){
-
-    }
-
-    /**
-     * Constructor that is primarily used to create Message objects
-     * @param text
-     * @param name
-     * @param photoUrl
-     * @param fileName
-     * @param fileUrl
-     */
-    public Message(String text, String name, String photoUrl, String fileName, String fileUrl ) {
+    public Message(){}
+    public Message(String text, String name, String photoUrl, String fileName, String fileUrl) {
         this.text = text;
         this.name = name;
         this.photoUrl = photoUrl;
         this.fileName = fileName;
         this.fileUrl = fileUrl;
-
-        DateFormat dateFormat = new SimpleDateFormat("hh:mm");
-        this.time = dateFormat.format(new Date());
+        this.time = new SimpleDateFormat("hh:mm").format(new Date());
     }
 
     public String getText() {
-        return text;
+        return this.text;
     }
 
     public void setText(String text) {
@@ -54,19 +29,23 @@ public class Message {
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public String getTime(){ return time; }
+    public String getTime() {
+        return this.time;
+    }
 
-    public void setTime(String time) { this.time = time; }
+    public void setTime(String time) {
+        this.time = time;
+    }
 
     public String getPhotoUrl() {
-        return photoUrl;
+        return this.photoUrl;
     }
 
     public void setPhotoUrl(String photoUrl) {
@@ -74,7 +53,7 @@ public class Message {
     }
 
     public String getFileUrl() {
-        return fileUrl;
+        return this.fileUrl;
     }
 
     public void setFileUrl(String fileUrl) {
@@ -82,6 +61,6 @@ public class Message {
     }
 
     public String getFileName() {
-        return fileName;
+        return this.fileName;
     }
 }

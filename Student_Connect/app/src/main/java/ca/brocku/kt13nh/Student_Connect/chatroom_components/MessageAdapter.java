@@ -1,9 +1,7 @@
 package ca.brocku.kt13nh.Student_Connect.chatroom_components;
 
 /**
- * Created by Goal Diggers
- * MessageAdapter that conatins messages to be displayed in chatroom along with the views for
- * these messages
+ * Created by pc-user on 3/11/2018.
  */
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -30,11 +28,6 @@ public class MessageAdapter extends ArrayAdapter<Message> {
     }
 
     @Override
-    /**
-     * Provides the view for the adapter. Will display name, time, and a file link, picture or
-     * a message
-     * Clicking ont he file link will allow user to download the file
-     */
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
             convertView = ((Activity) getContext()).getLayoutInflater()
@@ -46,10 +39,12 @@ public class MessageAdapter extends ArrayAdapter<Message> {
         TextView authorTextView = (TextView) convertView.findViewById(R.id.chatUserTextView);
         TextView fileLinkTextView = (TextView) convertView.findViewById(R.id.chatFileLinkTextView);
         fileLinkTextView.setPaintFlags(fileLinkTextView.getPaintFlags() |
-                                                                    Paint.UNDERLINE_TEXT_FLAG);
+                Paint.UNDERLINE_TEXT_FLAG);
         TextView timeTextView = (TextView) convertView.findViewById(R.id.chatTimeTextView);
 
         final Message message = getItem(position);
+
+
         boolean isPhoto = message.getPhotoUrl() != null;
         boolean isFileLink = message.getFileUrl() != null;
 

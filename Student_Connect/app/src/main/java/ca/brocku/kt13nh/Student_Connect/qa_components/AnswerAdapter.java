@@ -30,10 +30,6 @@ public class AnswerAdapter extends ArrayAdapter<Answer> {
     }
 
     @Override
-    /**
-     * Provides a view for the AnswerAdapter
-     * Will display name, time, and either a file link, picture, or a message
-     */
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
             convertView = ((Activity) getContext()).getLayoutInflater()

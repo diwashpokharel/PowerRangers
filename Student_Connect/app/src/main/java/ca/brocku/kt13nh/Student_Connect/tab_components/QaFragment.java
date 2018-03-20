@@ -1,5 +1,6 @@
 package ca.brocku.kt13nh.Student_Connect.tab_components;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,11 +14,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,6 +33,7 @@ import ca.brocku.kt13nh.Student_Connect.R;
 public class QaFragment extends Fragment {
     private View view;
     ArrayList<String> arrayList = new ArrayList<>();
+    ArrayList<String> enrolled = new ArrayList<>();
     private String title;//String for tab title
 
     private static RecyclerView recyclerView;
@@ -36,9 +41,15 @@ public class QaFragment extends Fragment {
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mChatroomDatabaseReference;
     private ChildEventListener mChildEventListener;
-
+    private FirebaseAuth authenticator= FirebaseAuth.getInstance();
+    private FirebaseUser currUser = authenticator.getCurrentUser();
+    private String userId;
+    private DatabaseReference table_user_enrolled;
+   // private DatabaseReference table_user = mFirebaseDatabase.getReference().child("User");
     private QaAdapter qaAdapter;
 
+    public QaFragment(){}
+    @SuppressLint("ValidFragment")
     public QaFragment(String title) {
         this.title = title;//Setting tab title
     }
@@ -48,22 +59,43 @@ public class QaFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.dummy_fragment, container, false);
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mChatroomDatabaseReference = mFirebaseDatabase.getReference().child("Questions");
-        setRecyclerView();
-        attachDatabaseReadListener();
+        if(currUser!=null) {
+            userId = currUser.getUid();
+            mChatroomDatabaseReference = mFirebaseDatabase.getReference().child("Questions");
+            table_user_enrolled = mFirebaseDatabase.getReference().child("User").child(userId).child("enrolled");
+        }
+        setEnrolled();
+
 
         return view;
 
     }
+
+    private void setEnrolled(){
+        table_user_enrolled.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    enrolled.add(snapshot.getKey());
+                }
+                setRecyclerView();
+                attachDatabaseReadListener();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     //Setting recycler view
     private void setRecyclerView() {
 
 
-        recyclerView = (RecyclerView) view
-                .findViewById(R.id.recyclerView);
+        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
-        recyclerView
-                .setLayoutManager(new LinearLayoutManager(getActivity()));//Linear Items
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));//Linear Items
 
         qaAdapter = new QaAdapter(getActivity());
         recyclerView.setAdapter(qaAdapter);// set adapter on recyclerview
@@ -71,8 +103,8 @@ public class QaFragment extends Fragment {
     }
 
     /**
-     * Attaches listener to questions table. When a question is added, that question appears in
-     * the QA tab
+     * Attaches listener to questions table. When a question is added, that chatroom appears in
+     * the inbox
      */
     private void attachDatabaseReadListener(){
         if(mChildEventListener == null) {
@@ -84,18 +116,29 @@ public class QaFragment extends Fragment {
                     String course = (String) dataSnapshot.child("course").getValue().toString();
                     String description = (String) dataSnapshot.child("description").getValue().toString();
                     String askedBy = (String) dataSnapshot.child("user").getValue().toString();
-                    String time = (String) dataSnapshot.child("time").getValue().toString();
+                    String time = (String) dataSnapshot.child("date").getValue().toString();
+                    String anonymous = (String) dataSnapshot.child("anonymous").getValue().toString();
+                    String UID = currUser.getUid();
 
                     Map<String, String> questionData = new HashMap<>();
                     questionData.put("questionID", questionID);
                     questionData.put("title", questionTitle);
                     questionData.put("course", course);
                     questionData.put("description", description);
-                    questionData.put("askedBy", askedBy);
+                    if(anonymous.equals("true")) {
+                        questionData.put("askedBy", "anonymous");
+                    }
+                    else
+                        questionData.put("askedBy",askedBy);
                     questionData.put("time", time);
 
-                    qaAdapter.addQuestion(questionData);
-                    recyclerView.setAdapter(qaAdapter);
+                    System.out.println(enrolled.size());
+                    System.out.println("course: "+course+" "+enrolled.contains(course));
+                    if(enrolled.contains(course)) {
+                        qaAdapter.addQuestion(questionData);
+                        recyclerView.setAdapter(qaAdapter);
+                    }
+
                 }
 
                 @Override

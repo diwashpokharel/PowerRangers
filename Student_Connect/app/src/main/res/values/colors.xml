@@ -22,4 +22,14 @@
     <color name="navigationBarColor">#000000</color>
     <color name="bg">#093b15</color>
 
+    <color name="navyBlue">#002448</color>
+    <color name="steelBlue">#324F6C</color>
+    <color name="official">#212121</color>
+    <color name="lightGrey">#D3D3D3</color>
+    <color name="dimGrey">#696969</color>
+    <color name="darkGrey">#A9A9A9</color>
+    <color name="lightBurgundy">#993D3D</color>
+    <color name="darkRed">#660000</color>
+    <color name="offRed">#843232</color>
+
 </resources>

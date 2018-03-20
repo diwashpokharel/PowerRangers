@@ -137,5 +137,6 @@ public class activity_register extends AppCompatActivity {
         table_user.child(user.getUid().toString()).child("qa").setValue("");
         table_user.child(user.getUid().toString()).child("events").setValue("");
         table_user.child(user.getUid().toString()).child("private_chats").setValue("");
+        table_user.child(user.getUid().toString()).child("first_login").setValue("false");
     }
 }

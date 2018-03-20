@@ -9,10 +9,19 @@
     android:background="@drawable/background"
     >
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:fillViewport="true">
+    <RelativeLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent">
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:layout_centerInParent="true">
 
         <com.rengwuxian.materialedittext.MaterialEditText
@@ -48,12 +57,14 @@
             android:textColorHint="@android:color/white"
             app:met_floatingLabel="highlight"
             app:met_primaryColor="@android:color/white"
+
             app:met_singleLineEllipsis="true" />
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
         android:id="@+id/linearLayout">
         <Button
             android:id="@+id/forgotPasswordButton"
@@ -74,5 +85,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"/>
     </LinearLayout>
-    
+    </RelativeLayout>
+    </ScrollView>
 </RelativeLayout>

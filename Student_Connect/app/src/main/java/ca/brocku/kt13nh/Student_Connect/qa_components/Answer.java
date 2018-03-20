@@ -16,20 +16,9 @@ public class Answer {
     private String fileUrl;
     private String time;
 
-    /**
-     * Default constructor for Answer object
-     */
     public Answer(){
     }
 
-    /**
-     * Constructor for Answer bject that is used to encapsulate Answer data
-     * @param explanation
-     * @param user
-     * @param photoUrl
-     * @param fileName
-     * @param fileUrl
-     */
     public Answer(String explanation, String user, String photoUrl, String fileName, String fileUrl ) {
         this.explanation = explanation;
         this.user = user;

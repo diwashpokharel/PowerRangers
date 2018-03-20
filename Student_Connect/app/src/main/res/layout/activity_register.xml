@@ -8,7 +8,10 @@
     tools:context="ca.brocku.kt13nh.Student_Connect.login_reg_java_v2.activity_login"
     android:background="@drawable/books"
     >
-
+    <ScrollView
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true">
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -121,6 +124,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"/>
     </LinearLayout>
-
+    </ScrollView>
 
 </RelativeLayout>
