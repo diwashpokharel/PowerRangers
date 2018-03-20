@@ -86,6 +86,7 @@ public class Event extends AppCompatActivity {
                     values[pos]=name;
                     pos++;
                 }
+                adapter.clear();
                 adapter.addAll(values);
                 listview.setAdapter(adapter);
             }

@@ -23,7 +23,7 @@ import ca.brocku.kt13nh.Student_Connect.chatroom_components.Chatroom;
 
 public class RecyclerView_Adapter extends
         RecyclerView.Adapter<DemoViewHolder> {
-    private List<Map<String, String>> arrayList;
+    private List<Map<String, Object>> arrayList;
     private Context context;
     private OnRecyclerClickListener onRecyclerClickListener;
 
@@ -39,8 +39,12 @@ public class RecyclerView_Adapter extends
 
     }
 
-    public void addChatroom(Map<String, String> chatroomData){
+    public void addChatroom(Map<String, Object> chatroomData){
         arrayList.add(chatroomData);
+    }
+
+    public void clearChatrooms(){
+        arrayList.clear();
     }
 
     @Override
@@ -55,7 +59,7 @@ public class RecyclerView_Adapter extends
         final DemoViewHolder mainHolder = (DemoViewHolder) holder;
         //Setting text over textview
         // mainHolder.bind(arrayList.get(position), listener);
-        mainHolder.title.setText(arrayList.get(position).get("ChatName"));
+        mainHolder.title.setText(arrayList.get(position).get("ChatName").toString());
 
     }
 
@@ -125,17 +129,20 @@ public class RecyclerView_Adapter extends
             }
         });
 
-
+        //Opens the chatroom activity and provides all the data for the chatroom
+        //such as chatID, chatName, etc.
         final View.OnClickListener mOnClickListener = new View.OnClickListener(){
 
             @Override
             public void onClick(View view)
             {
                 int position = mainHolder.getLayoutPosition();
-                Map<String, String> chatroom = arrayList.get(position);
+                Map<String, Object> chatroom = arrayList.get(position);
                 Intent chatroomIntent = new Intent(context, Chatroom.class);
-                chatroomIntent.putExtra("chatID", chatroom.get("ChatID"));
-                chatroomIntent.putExtra("chatroomName", chatroom.get("ChatName"));
+                chatroomIntent.putExtra("chatID", (String)chatroom.get("ChatID"));
+                chatroomIntent.putExtra("chatroomName", (String)chatroom.get("ChatName"));
+                chatroomIntent.putExtra("isPublic", (boolean)chatroom.get("isPublic"));
+                chatroomIntent.putExtra("admin", (String)chatroom.get("admin"));
                 context.startActivity(chatroomIntent);
 
             }};
