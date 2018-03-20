@@ -180,6 +180,7 @@ public class InboxFragment extends Fragment {
         });
 
         //Chatroom table listener that gets a list of all chatrooms whenever any
+        //new chatroom is added
         mChatroomDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

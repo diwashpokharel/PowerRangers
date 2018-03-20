@@ -94,53 +94,59 @@ public class ChatroomCreatorDialog extends Dialog {
             public void onClick(View v) {
                 //Adds new chatroom to chatrooms table
                 String usersToAddString = usersToAdd.getText().toString();
-                if(usersToAddString.equals("") || usersToAddString.matches(
-                        "(([a-z]+[\\s][a-z]+[\\s]*\\(" +
-                                "[a-z][a-z][0-9][0-9][a-z][a-z]@brocku.ca\\))+,*)+")) {
+                if(!chatName.getText().toString().equals("")) {
+                    if (usersToAddString.equals("") || usersToAddString.matches(
+                            "(([a-z]+[\\s][a-z]+[\\s]*\\(" +
+                                    "[a-z][a-z][0-9][0-9][a-z][a-z]@brocku.ca\\))+,*)+")) {
 
-                    Map<String, Object> chatroomData = new HashMap<>();
-                    chatroomData.put("ChatName", (Object) (chatName.getText().toString()));
-                    chatroomData.put("isPublic", (Object) false);
-                    chatroomData.put("admin", (Object)currentUser.getEmail());
-                    DatabaseReference newChatRef = mChatroomsReference.push();
-                    newChatRef.setValue(chatroomData);
+                        Map<String, Object> chatroomData = new HashMap<>();
+                        chatroomData.put("ChatName", (Object) (chatName.getText().toString()));
+                        chatroomData.put("isPublic", (Object) false);
+                        chatroomData.put("admin", (Object) currentUser.getEmail());
+                        DatabaseReference newChatRef = mChatroomsReference.push();
+                        newChatRef.setValue(chatroomData);
 
-                    //Adds reference to the private chat in the current user's
-                    //list of private chat data
-                    DatabaseReference currentUserReference = mUsersReference
-                                                                    .child(currentUser.getUid());
-                    Map<String, Object> privateChatInfo = new HashMap<>();
-                    privateChatInfo.put(newChatRef.getKey(),
-                                                (Object) (chatName.getText().toString()));
-                    currentUserReference.child("private_chats").updateChildren(privateChatInfo);
+                        //Adds reference to the private chat in the current user's
+                        //list of private chat data
+                        DatabaseReference currentUserReference = mUsersReference
+                                .child(currentUser.getUid());
+                        Map<String, Object> privateChatInfo = new HashMap<>();
+                        privateChatInfo.put(newChatRef.getKey(),
+                                (Object) (chatName.getText().toString()));
+                        currentUserReference.child("private_chats").updateChildren(privateChatInfo);
 
-                    //Adds the private chat reference to the private chat list of all the users that
-                    //were invited to the chat
-                    if (!usersToAdd.getText().toString().equals("")) {
-                        String[] usersToAddList = usersToAdd.getText().toString().split(",");
-                        for (String userToAdd : usersToAddList) {
-                            if (!userToAdd.equals(" ")) {
-                                String userToAddEmail = userToAdd.split("\\(")[1]
-                                        .split("\\)")[0];
+                        //Adds the private chat reference to the private chat list of all the users that
+                        //were invited to the chat
+                        if (!usersToAdd.getText().toString().equals("")) {
+                            String[] usersToAddList = usersToAdd.getText().toString().split(",");
+                            for (String userToAdd : usersToAddList) {
+                                if (!userToAdd.equals(" ")) {
+                                    String userToAddEmail = userToAdd.split("\\(")[1]
+                                            .split("\\)")[0];
 
-                                for (Map<String, Object> user : users) {
-                                    if (user.get("email").toString().equals(userToAddEmail)) {
-                                        mUsersReference.child(user.get("userID").toString())
-                                                .child("private_chats")
-                                                .updateChildren(privateChatInfo);
+                                    for (Map<String, Object> user : users) {
+                                        if (user.get("email").toString().equals(userToAddEmail)) {
+                                            mUsersReference.child(user.get("userID").toString())
+                                                    .child("private_chats")
+                                                    .updateChildren(privateChatInfo);
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
 
-                    dismiss();
+                        dismiss();
+                    } else {
+                        Toast.makeText(getContext(),
+                                "User must be entered in the correct format, " +
+                                        "ie. FirstName LastName (aa11bb@brocku.ca), ...",
+                                Toast.LENGTH_LONG).show();
+                    }
                 }
                 else{
                     Toast.makeText(getContext(),
-                                    "User must be entered in the correct format, " +
-                                            "ie. FirstName LastName (aa11bb@brocku.ca), ...",
-                                             Toast.LENGTH_LONG).show();
+                            "Chatroom names must be between 1-16 characters",
+                                     Toast.LENGTH_LONG).show();
                 }
             }
         });

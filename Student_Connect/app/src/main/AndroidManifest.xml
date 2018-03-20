@@ -64,7 +64,10 @@
         <activity android:name=".chatroom_components.ChatroomCreatorDialog" />
         <activity
             android:name=".chatroom_components.ChatroomSettings"
-            android:theme="@style/RoomTheme"></activity>
+            android:theme="@style/RoomTheme" />
+        <activity
+            android:name=".drawer_components.Profile"
+            android:theme="@style/RoomTheme" ></activity>
     </application>
 
 </manifest>

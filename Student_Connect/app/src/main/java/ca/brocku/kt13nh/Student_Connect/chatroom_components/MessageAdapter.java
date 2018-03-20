@@ -1,7 +1,9 @@
 package ca.brocku.kt13nh.Student_Connect.chatroom_components;
 
 /**
- * Created by pc-user on 3/11/2018.
+ * Created by Goal Diggers
+ * MessageAdapter that conatins messages to be displayed in chatroom along with the views for
+ * these messages
  */
 import android.app.Activity;
 import android.content.ActivityNotFoundException;

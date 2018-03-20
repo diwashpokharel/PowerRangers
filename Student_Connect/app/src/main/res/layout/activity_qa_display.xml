@@ -60,7 +60,8 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/functionsLinearLayout"
         android:layout_below="@+id/questionLinearLayout"
-        android:divider="@android:color/black"
+        android:divider="?android:colorBackground"
+        android:dividerHeight="10.0sp"
         android:transcriptMode="alwaysScroll"
         tools:listitem="@layout/item_answer"/>
 
