@@ -132,11 +132,7 @@ public class NewEvent extends AppCompatActivity{
                             eventData.put("email", email);
                             eventData.put("creator", fullName);
                             eventData.put("joined","");
-<<<<<<< HEAD
                             addChatRoom(eventID,eventTitle);
-=======
-                            addChatRoom(eventID,eventTitle,"true");
->>>>>>> master
                             table_events.child(eventID).setValue(eventData);
                             table_events.child(eventID).child("joined").child(UID).setValue(email);
                             table_user.child(UID).child("events").child(eventID).setValue(eventTitle);
@@ -159,17 +155,10 @@ public class NewEvent extends AppCompatActivity{
 
     }//addListenerOnButton
 
-<<<<<<< HEAD
     private void addChatRoom(String eventID, String title){
         final Map<String, Object> eventData = new HashMap<>();
         eventData.put("ChatName", (Object)title);
         eventData.put("isPublic",true);
-=======
-    private void addChatRoom(String eventID, String title, String isPublic){
-        final Map<String, String> eventData = new HashMap<>();
-        eventData.put("ChatName",title);
-        eventData.put("isPublic",isPublic);
->>>>>>> master
         table_chatrooms.child(eventID).setValue(eventData);
     }
 

@@ -69,16 +69,6 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
-            <!--need to add handler for this button still-->
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginLeft="5dp"
-                android:id="@+id/uploadPicButton"
-                android:text=" Upload Image"
-                android:textAllCaps="false"
-                android:drawableLeft="@drawable/ic_menu_gallery"/>
 
             <CheckBox
                 android:id="@+id/checkBoxQAAnonymous"

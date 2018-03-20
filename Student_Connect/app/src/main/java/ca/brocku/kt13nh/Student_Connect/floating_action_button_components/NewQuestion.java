@@ -77,20 +77,12 @@ public class NewQuestion extends Activity{
 
         Button postButton = (Button) findViewById(R.id.postButton);
         Button cancelButton = (Button) findViewById(R.id.cancelButton);
-        Button uploadPic = (Button) findViewById(R.id.uploadPicButton);
 
         editTitleField = (EditText) findViewById(R.id.editQATitle);
         editDescriptionField = (EditText) findViewById(R.id.editQADescription);
 
         anonymousCheckbox = (CheckBox) findViewById(R.id.checkBoxQAAnonymous);
 
-        //add listener on upload picture button (Ronny has missing code since he already did this on his part)
-        uploadPic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //get and save image from phone *****************
-            }
-        });
         //add listener on cancel button
         cancelButton.setOnClickListener(new View.OnClickListener(){
             @Override
