@@ -47,8 +47,10 @@ public class CourseRegisterPage extends AppCompatActivity {
     @Override
     public void onBackPressed() {}
 
+    //initialize database info into the courses arraylist.
     private void getDatabaseInfo(){
         table_courses.addListenerForSingleValueEvent(new ValueEventListener() {
+            //add courses into the courses arraylist
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
@@ -62,6 +64,7 @@ public class CourseRegisterPage extends AppCompatActivity {
         });
     }
 
+    //set the button listeners for next and cancel
     private void setListeners(){
         Button next = (Button) findViewById(R.id.nextButton);
         Button previous = (Button) findViewById(R.id.previousButton);
@@ -86,6 +89,7 @@ public class CourseRegisterPage extends AppCompatActivity {
                 String course4 = editCourse4.getText().toString().toUpperCase();
                 String course5 = editCourse5.getText().toString().toUpperCase();
                 String course6 = editCourse6.getText().toString().toUpperCase();
+                //check to see if any of the courses are not valid. If they are, then don't proceed
                 if (checkValidCourses(course1, course2, course3, course4, course5, course6)) {
                     Intent courseRegisterPage = new Intent(getBaseContext(),HobbiesRegisterPage.class);
                     courseRegisterPage.putExtra("course1",course1);
@@ -112,6 +116,9 @@ public class CourseRegisterPage extends AppCompatActivity {
         });
     }
 
+    /*
+    * Simple method to check if any of the supplied courses are valid courses
+    * */
     private boolean checkValidCourses(String c1, String c2, String c3, String c4, String c5, String c6){
         if(!c1.trim().isEmpty()){
             if(!courses.contains(c1)){

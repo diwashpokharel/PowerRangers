@@ -114,7 +114,7 @@ public class ChatroomCreatorDialog extends Dialog {
                 String usersToAddString = usersToAdd.getText().toString();
                 if(!chatName.getText().toString().equals("")) {
                     if (usersToAddString.equals("") || usersToAddString.matches(
-                            "(([a-z]+[\\s][a-z]+[\\s]*\\(" +
+                            "(([a-zA-Z]+[\\s][a-zA-Z]+[\\s]*\\(" +
                                     "[a-z][a-z][0-9][0-9][a-z][a-z]@brocku.ca\\))+,*\\s*)+")) {
 
                         Map<String, Object> chatroomData = new HashMap<>();

@@ -43,6 +43,7 @@ public class NewEvent extends AppCompatActivity{
     private FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
     private DatabaseReference table_events = mFirebaseDatabase.getReference().child("Events");
     private DatabaseReference table_user = mFirebaseDatabase.getReference().child("User");
+    private DatabaseReference table_chatrooms = mFirebaseDatabase.getReference().child("Chatrooms");
     private FirebaseAuth authenticator= FirebaseAuth.getInstance();
     private FirebaseUser currUser = authenticator.getCurrentUser();
     @Override
@@ -116,7 +117,7 @@ public class NewEvent extends AppCompatActivity{
                 final Map<String, String> eventData = new HashMap<>();
 
                 if(!eventTitle.equals("")&&!location.equals("")) {
-                    table_user.addValueEventListener(new ValueEventListener() {
+                    table_user.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(final DataSnapshot dataSnapshot) {
                             final String firstName = dataSnapshot.child(UID).child("first_name").getValue().toString();
@@ -131,8 +132,9 @@ public class NewEvent extends AppCompatActivity{
                             eventData.put("email", email);
                             eventData.put("creator", fullName);
                             eventData.put("joined","");
+                            addChatRoom(eventID,eventTitle);
                             table_events.child(eventID).setValue(eventData);
-                            table_events.child(eventID).child("joined").child(UID).setValue(fullName);
+                            table_events.child(eventID).child("joined").child(UID).setValue(email);
                             table_user.child(UID).child("events").child(eventID).setValue(eventTitle);
                             Toast.makeText(NewEvent.this, "Event created!", Toast.LENGTH_SHORT).show();
 
@@ -152,5 +154,12 @@ public class NewEvent extends AppCompatActivity{
         });
 
     }//addListenerOnButton
+
+    private void addChatRoom(String eventID, String title){
+        final Map<String, Object> eventData = new HashMap<>();
+        eventData.put("ChatName", (Object)title);
+        eventData.put("isPublic",true);
+        table_chatrooms.child(eventID).setValue(eventData);
+    }
 
 }//PopUpAdd

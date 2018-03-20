@@ -41,7 +41,7 @@
             android:cropToPadding="false"
             android:paddingLeft="0dp"
             android:scaleType="center"
-            android:src="@mipmap/white"
+            android:src="@mipmap/pic"
             android:visibility="visible"></ImageView>
 
     </RelativeLayout>

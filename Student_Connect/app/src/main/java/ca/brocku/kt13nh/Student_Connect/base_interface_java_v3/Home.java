@@ -26,15 +26,15 @@ public class Home extends Fragment {
     private int tabPosition = 0;
     private View view;
 
-
-
+    /*
+    * Initialize floating action button and set positions of the tab
+    * */
     public void initFloatingActionButton() {
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.addButton);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (Home.this.tabPosition == 0) {
-                    //Opens Dialog that allows you to add chatrooms
                     Dialog chatCreatorDialog = new ChatroomCreatorDialog(view.getContext());
                     chatCreatorDialog.getWindow().getAttributes().width = ViewGroup.LayoutParams.MATCH_PARENT;
                     chatCreatorDialog.setTitle("Create Private Chatroom");

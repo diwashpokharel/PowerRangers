@@ -19,8 +19,16 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+
 import ca.brocku.kt13nh.Student_Connect.R;
 
+/*
+*
+* This class is used for the purpose of enabling users to be able to join a created event
+* along with the displaying the correct information of each of the events to the user in the
+* form of textbox, and a listview of the names of the people joined
+* */
 public class Event extends AppCompatActivity {
     private FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
     private DatabaseReference table_events = mFirebaseDatabase.getReference().child("Events");
@@ -28,6 +36,8 @@ public class Event extends AppCompatActivity {
     private FirebaseAuth authenticator= FirebaseAuth.getInstance();
     private FirebaseUser currUser = authenticator.getCurrentUser();
 
+    //create view, set the toolbar and titles,
+    //initialization
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView((int) R.layout.activity_event);
@@ -42,9 +52,13 @@ public class Event extends AppCompatActivity {
         setToggleButtonListeners();
     }
 
+    /*
+    * Set toggle button listeners and display the correct status to the user based on if they
+    * have already joined the event.
+    * */
     private void setToggleButtonListeners(){
-       final String eventID=getIntent().getStringExtra("eventID");
-       final String eventTitle = getIntent().getStringExtra("title");
+        final String eventID=getIntent().getStringExtra("eventID");
+        final String eventTitle = getIntent().getStringExtra("title");
         final String UID = currUser.getUid();
         final String email = currUser.getEmail();
         ToggleButton toggleButton = (ToggleButton)findViewById(R.id.toggleButton);
@@ -54,7 +68,6 @@ public class Event extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
                     System.out.println("Joined");
-
                     table_events.child(eventID).child("joined").child(UID).setValue(email);
                     table_user.child(UID).child("events").child(eventID).setValue(eventTitle);
                     setList();
@@ -69,12 +82,16 @@ public class Event extends AppCompatActivity {
             }
         });
     }
+    /*
+    * set the arraylist adapters and populate the listview with the users that are currently
+    * planning to attend the event
+    * */
     private void setList() {
         Intent intent = getIntent();
         final String eventID = intent.getStringExtra("eventID");
-
+        //this is the adapter to be used for the list display
         final ArrayAdapter<String> adapter = new ArrayAdapter(this, R.layout.textcenter, R.id.name_text);
-
+        //listen for changes in the events table for the users that have joined to update realtime
         table_events.child(eventID).child("joined").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -97,13 +114,16 @@ public class Event extends AppCompatActivity {
         });
     }
 
+    /*
+    * Set the correct text in the textviews and display the button correctly for whether or not the
+    * person has already joined the vent
+    * */
     private void setText() {
 
+        //get extra strings from the intent for the strings to display
         String eventDescription = getIntent().getStringExtra("description");
         String location = getIntent().getStringExtra("location");
-
         String date = getIntent().getStringExtra("date");
-
         String time = getIntent().getStringExtra("time");
         String joined = getIntent().getStringExtra("joined");
 
@@ -111,6 +131,8 @@ public class Event extends AppCompatActivity {
         ((TextView) findViewById(R.id.locationView)).setText("Location: "+location);
         ((TextView) findViewById(R.id.dateView)).setText(date);
         ((TextView) findViewById(R.id.timeView)).setText(time);
+
+        //display button to be checked if use has already joined
         ToggleButton toggleButton = (ToggleButton) findViewById(R.id.toggleButton);
         if(joined.equals("true")){
             toggleButton.setChecked(true);
@@ -120,6 +142,7 @@ public class Event extends AppCompatActivity {
         }
     }
 
+    //check if the current user of the app is also the creator of the viewed event
     private void checkCreator(){
         String eventEmail = getIntent().getStringExtra("email");
         String userEmail = currUser.getEmail();

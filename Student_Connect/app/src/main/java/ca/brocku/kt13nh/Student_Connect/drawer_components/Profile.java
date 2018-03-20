@@ -257,8 +257,9 @@ public class Profile extends AppCompatActivity {
 
         email.setEnabled(false);
         email.setClickable(false);
-        changePassword.setEnabled(false);
         changePassword = (Button) findViewById(R.id.changePassword);
+        changePassword.setEnabled(false);
+
         save = (Button) findViewById(R.id.save);
         save.setEnabled(false);
         save.setOnClickListener(new View.OnClickListener() {

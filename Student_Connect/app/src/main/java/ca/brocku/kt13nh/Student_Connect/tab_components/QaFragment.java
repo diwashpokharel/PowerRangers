@@ -29,10 +29,14 @@ import java.util.Map;
 
 import ca.brocku.kt13nh.Student_Connect.R;
 
-
+/*
+*
+* This fragment is the tab that is to be display to the user to show them all of the courses they
+* have registered for that have questions to be answered.
+* */
 public class QaFragment extends Fragment {
     private View view;
-    ArrayList<String> arrayList = new ArrayList<>();
+    //to hold the list of enrolled courses
     ArrayList<String> enrolled = new ArrayList<>();
     private String title;//String for tab title
 
@@ -54,6 +58,7 @@ public class QaFragment extends Fragment {
         this.title = title;//Setting tab title
     }
 
+    //create view and initialize firebase
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -71,6 +76,7 @@ public class QaFragment extends Fragment {
 
     }
 
+    //read from data base and set the enrolled courses into the array list, and display
     private void setEnrolled(){
         table_user_enrolled.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

@@ -1,5 +1,6 @@
 package ca.brocku.kt13nh.Student_Connect.tab_components;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -64,6 +65,7 @@ public class InboxFragment extends Fragment {
     }
 
     //public InboxFragment(){}
+    @SuppressLint("ValidFragment")
     public InboxFragment(String title) {
         this.title = title;//Setting tab title
     }
@@ -142,28 +144,42 @@ public class InboxFragment extends Fragment {
                     privateChatsMapping = (Map<String, String>) dataSnapshot.child("private_chats").getValue();
 
                 Map<String, String> joinedEventsMapping = new HashMap<>();
-                if(!dataSnapshot.child("events").getValue().toString().equals(""))
+                if(!dataSnapshot.child("events").getValue().toString().equals("")) {
                     joinedEventsMapping = (Map<String, String>) dataSnapshot.child("events").getValue();
-                //Map<String, String> hobbiesMapping = (Map<String, String>) dataSnapshot.child("hobbies").getValue();
-
+                }
+                Map<String, String> hobbiesMapping = (Map<String, String>) dataSnapshot.child("hobbies").getValue();
+                if(!dataSnapshot.child("events").getValue().toString().equals("")) {
+                    hobbiesMapping = (Map<String, String>) dataSnapshot.child("hobbies").getValue();
+                }
                 //Makes list of enrolled courseIDs, joined private chat IDs, joined event IDs,
                 // and hobbies
                 coursesEnrolledList.clear();
-                for (String courseID : enrolledMapping.keySet()) {
-                    coursesEnrolledList.add(courseID);
+                if(enrolledMapping != null) {
+                    for (String courseID : enrolledMapping.keySet()) {
+                        coursesEnrolledList.add(courseID);
+                    }
                 }
+
                 privateChatsList.clear();
-                for (String privateChat : privateChatsMapping.keySet()) {
-                    privateChatsList.add(privateChat);
+                if(privateChatsMapping != null) {
+                    for (String privateChat : privateChatsMapping.keySet()) {
+                        privateChatsList.add(privateChat);
+                    }
                 }
+
                 eventsJoinedList.clear();
-                for (String event : joinedEventsMapping.keySet()) {
-                    eventsJoinedList.add(event);
+                if(joinedEventsMapping != null) {
+                    for (String event : joinedEventsMapping.keySet()) {
+                        eventsJoinedList.add(event);
+                    }
                 }
-//                hobbiesList.clear();
-//                for (String hobby : hobbiesMapping.keySet()) {
-//                    coursesEnrolledList.add(hobby);
-//                }
+
+                hobbiesList.clear();
+                if(hobbiesMapping != null) {
+                    for (String hobby : hobbiesMapping.keySet()) {
+                        hobbiesList.add(hobby);
+                    }
+                }
 
                 chatroomListAdapter.clearChatrooms();
                 for (Map.Entry<String, Object> chatroom : chatrooms.entrySet()) {
@@ -178,7 +194,7 @@ public class InboxFragment extends Fragment {
                     //Only displays the chatroom if user has enrolled in the course/joined the
                     // event/been invited to the private chat
                     if (coursesEnrolledList.contains(chatName) || privateChatsList.contains(chatID)
-                            || eventsJoinedList.contains(chatID)) {
+                            || eventsJoinedList.contains(chatID) || hobbiesList.contains(chatID)) {
                         Map<String, Object> chatroomData = new HashMap<>();
                         chatroomData.put("ChatID", chatID);
                         chatroomData.put("ChatName", chatName);

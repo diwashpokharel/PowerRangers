@@ -100,31 +100,14 @@ public class RecyclerView_Adapter extends
             @Override
             public void onClick(View view) {
                 image=(ImageView) view.findViewById(R.id.iv_image);
-
-                //   image.setFavorite();
-                System.out.println("This is my number " + k);
-                //     image.setImageResource(R.mipmap.pic);
-
-                if(k==0 || k==1 || k==2)
-                    myfav1=false;
-
-                if(!myfav1){
-                    myfav1=true;
-                    image.setImageResource(R.mipmap.pic);
-                }
-
-                else
-                {
-                    myfav1=false;
-                    image.setImageResource(R.mipmap.white);
-                }
-                int pol[]={0,0,0};
-                if(k==0)
-                    pol[0]=0;
-                else if(k==1)
-                    pol[1]=1;
-                else if (k==2)
-                    pol[2]=2;
+                int position = mainHolder.getLayoutPosition();
+                Map<String, Object> chatroom = arrayList.get(position);
+                Intent chatroomIntent = new Intent(context, Chatroom.class);
+                chatroomIntent.putExtra("chatID", (String)chatroom.get("ChatID"));
+                chatroomIntent.putExtra("chatroomName", (String)chatroom.get("ChatName"));
+                chatroomIntent.putExtra("isPublic", (boolean)chatroom.get("isPublic"));
+                chatroomIntent.putExtra("admin", (String)chatroom.get("admin"));
+                context.startActivity(chatroomIntent);
 
             }
         });
@@ -147,19 +130,8 @@ public class RecyclerView_Adapter extends
 
             }};
 
-        final View.OnLongClickListener longClickListener= new View.OnLongClickListener(){
 
-            @Override
-            public boolean onLongClick(View view) {
-                //    showChangeLangDialog();
-                final Dialog dialog = new Dialog(context);
-                dialog.setContentView(R.layout.menu_add);
-                dialog.show();
-                return false;
-            }
-        };
 
-        mainGroup.setOnLongClickListener(longClickListener);
         mainGroup.setOnClickListener(mOnClickListener);
 
 // 13805 ////////////////////////////////

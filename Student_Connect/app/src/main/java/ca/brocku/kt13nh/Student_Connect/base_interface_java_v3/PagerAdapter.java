@@ -7,14 +7,19 @@ import ca.brocku.kt13nh.Student_Connect.tab_components.EventsFragment;
 import ca.brocku.kt13nh.Student_Connect.tab_components.InboxFragment;
 import ca.brocku.kt13nh.Student_Connect.tab_components.QaFragment;
 
+/*
+* Simple pager adapter for the purpose of obtaining tab positions and initialize a default
+* */
 public class PagerAdapter extends FragmentStatePagerAdapter {
     int mNumOfTabs;
 
+    //set number of tabs
     public PagerAdapter(FragmentManager fm, int NumOfTabs) {
         super(fm);
         this.mNumOfTabs = NumOfTabs;
     }
 
+    //return fragments based on the tab positions
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
@@ -27,7 +32,7 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
                 return new InboxFragment("Inbox");
         }
     }
-
+    //return number of tabs
     public int getCount() {
         return this.mNumOfTabs;
     }
