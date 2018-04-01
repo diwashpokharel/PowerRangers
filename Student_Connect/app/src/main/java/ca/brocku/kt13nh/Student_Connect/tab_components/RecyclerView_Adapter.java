@@ -47,6 +47,7 @@ public class RecyclerView_Adapter extends
         arrayList.clear();
     }
 
+
     @Override
     public int getItemCount() {
         return (null != arrayList ? arrayList.size() : 0);
@@ -57,8 +58,14 @@ public class RecyclerView_Adapter extends
     public void onBindViewHolder(DemoViewHolder holder,
                                  int position) {
         final DemoViewHolder mainHolder = (DemoViewHolder) holder;
+        image=(ImageView) mainHolder.getView().findViewById(R.id.iv_image);
+        boolean isPublic = (boolean) arrayList.get(position).get("isPublic");
+        if (isPublic)
+            image.setImageResource(R.mipmap.globe);
+        else
+            image.setImageResource(R.mipmap.lock);
+
         //Setting text over textview
-        // mainHolder.bind(arrayList.get(position), listener);
         mainHolder.title.setText(arrayList.get(position).get("ChatName").toString());
 
     }
@@ -95,22 +102,15 @@ public class RecyclerView_Adapter extends
 
 
         k= mainHolder.getLayoutPosition();
-        image=(ImageView) mainGroup.findViewById(R.id.iv_image);
-        image.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                image=(ImageView) view.findViewById(R.id.iv_image);
-                int position = mainHolder.getLayoutPosition();
-                Map<String, Object> chatroom = arrayList.get(position);
-                Intent chatroomIntent = new Intent(context, Chatroom.class);
-                chatroomIntent.putExtra("chatID", (String)chatroom.get("ChatID"));
-                chatroomIntent.putExtra("chatroomName", (String)chatroom.get("ChatName"));
-                chatroomIntent.putExtra("isPublic", (boolean)chatroom.get("isPublic"));
-                chatroomIntent.putExtra("admin", (String)chatroom.get("admin"));
-                context.startActivity(chatroomIntent);
+//        image=(ImageView) mainGroup.findViewById(R.id.iv_image);
+//        if(k >= 0) {
+//            boolean isPublic = (boolean) arrayList.get(k).get("isPublic");
+//            if (isPublic)
+//                image.setBackgroundResource(R.mipmap.globe);
+//            else
+//                image.setBackgroundResource(R.mipmap.lock);
+//        }
 
-            }
-        });
 
         //Opens the chatroom activity and provides all the data for the chatroom
         //such as chatID, chatName, etc.
@@ -127,6 +127,7 @@ public class RecyclerView_Adapter extends
                 chatroomIntent.putExtra("isPublic", (boolean)chatroom.get("isPublic"));
                 chatroomIntent.putExtra("admin", (String)chatroom.get("admin"));
                 context.startActivity(chatroomIntent);
+
 
             }};
 

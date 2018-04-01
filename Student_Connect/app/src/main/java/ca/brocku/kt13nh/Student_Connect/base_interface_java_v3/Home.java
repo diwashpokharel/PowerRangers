@@ -60,6 +60,7 @@ public class Home extends Fragment {
         ((AppCompatActivity) getActivity()).setSupportActionBar((Toolbar) this.view.findViewById(R.id.toolbar));
         inflateTabs(this.view, (TabLayout) this.view.findViewById(R.id.tab_layout));
         initFloatingActionButton();
+
         return this.view;
     }
 

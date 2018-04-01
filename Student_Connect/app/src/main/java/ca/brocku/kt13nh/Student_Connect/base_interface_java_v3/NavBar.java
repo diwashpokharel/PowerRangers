@@ -1,6 +1,7 @@
 package ca.brocku.kt13nh.Student_Connect.base_interface_java_v3;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 
@@ -11,9 +12,19 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import ca.brocku.kt13nh.Student_Connect.MainActivity;
 import ca.brocku.kt13nh.Student_Connect.R;
 import ca.brocku.kt13nh.Student_Connect.drawer_components.CourseFragmentPage;
 import ca.brocku.kt13nh.Student_Connect.drawer_components.HobbiesFragmentPage;
@@ -28,11 +39,17 @@ import ca.brocku.kt13nh.Student_Connect.drawer_components.Profile;
 * */
 public class NavBar extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    final FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private FirebaseAuth authenticator = FirebaseAuth.getInstance();
+    private FirebaseUser currUser = authenticator.getCurrentUser();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nav);
+        checkReportCount();
+
         //set title and support actionbars
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Student Connect");
@@ -49,6 +66,7 @@ public class NavBar extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         //default selection home screen
         displaySelectedScreen(R.id.nav_home);
+
     }
 
 
@@ -108,5 +126,48 @@ public class NavBar extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
 
     }//displaySelectedScreen
+
+    private void checkReportCount(){
+        if(currUser != null) {
+            DatabaseReference currUserRef = database.getReference().child("User")
+                    .child(currUser.getUid());
+
+            currUserRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    int reportCount = Integer.parseInt(dataSnapshot.child("report_count").getValue().toString());
+                    if(reportCount >= 25){
+                        currUser.delete()
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            Toast.makeText(NavBar.this,
+                                                    "You have been banned for malicious behaviour!",
+                                                    Toast.LENGTH_LONG).show();
+                                            finish();
+                                        }
+                                        else{
+                                            Toast.makeText(NavBar.this,
+                                                    "You have been banned for malicious activity!",
+                                                    Toast.LENGTH_LONG).show();
+                                            authenticator.signOut();
+                                            finish();
+                                        }
+                                    }
+                                });
+
+
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+
+    }
 
 }

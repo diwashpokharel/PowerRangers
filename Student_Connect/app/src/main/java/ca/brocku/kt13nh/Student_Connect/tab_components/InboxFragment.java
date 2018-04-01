@@ -98,8 +98,7 @@ public class InboxFragment extends Fragment {
         recyclerView = (RecyclerView) view
                 .findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
-        recyclerView
-                .setLayoutManager(new LinearLayoutManager(getActivity()));//Linear Items
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));//Linear Items
 
         chatroomListAdapter = new RecyclerView_Adapter(getActivity());
         recyclerView.setAdapter(chatroomListAdapter);// set adapter on recyclerview
@@ -136,19 +135,23 @@ public class InboxFragment extends Fragment {
 
                 //Gets all enrolled courses, events joined, hobbies added and private chats joined for
                 //this user from the DB
-                if(!dataSnapshot.child("enrolled").getValue().toString().equals(""))
+                if(dataSnapshot.child("enrolled").getValue() != null &&
+                        !dataSnapshot.child("enrolled").getValue().toString().equals(""))
                     enrolledMapping= (Map<String, String>) dataSnapshot.child("enrolled").getValue();
 
                 Map<String, String> privateChatsMapping = new HashMap<>();
-                if(!dataSnapshot.child("private_chats").getValue().toString().equals(""))
+                if(dataSnapshot.child("private_chats").getValue() != null &&
+                        !dataSnapshot.child("private_chats").getValue().toString().equals(""))
                     privateChatsMapping = (Map<String, String>) dataSnapshot.child("private_chats").getValue();
 
                 Map<String, String> joinedEventsMapping = new HashMap<>();
-                if(!dataSnapshot.child("events").getValue().toString().equals("")) {
+                if(dataSnapshot.child("events").getValue() != null &&
+                        !dataSnapshot.child("events").getValue().toString().equals("")) {
                     joinedEventsMapping = (Map<String, String>) dataSnapshot.child("events").getValue();
                 }
-                Map<String, String> hobbiesMapping = (Map<String, String>) dataSnapshot.child("hobbies").getValue();
-                if(!dataSnapshot.child("events").getValue().toString().equals("")) {
+                Map<String, String> hobbiesMapping = new HashMap<>();
+                if(dataSnapshot.child("hobbies").getValue() != null &&
+                        !dataSnapshot.child("hobbies").getValue().toString().equals("")) {
                     hobbiesMapping = (Map<String, String>) dataSnapshot.child("hobbies").getValue();
                 }
                 //Makes list of enrolled courseIDs, joined private chat IDs, joined event IDs,
@@ -187,6 +190,7 @@ public class InboxFragment extends Fragment {
                     Map<String, Object> chatroomObject = (Map<String, Object>) chatroom.getValue();
                     String chatName = (String) chatroomObject.get("ChatName");
                     boolean isPublic = (boolean) chatroomObject.get("isPublic");
+
                     String admin = "";
                     if(!isPublic)
                         admin = (String) chatroomObject.get("admin");

@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.ListFragment;
 import android.support.v7.app.AlertDialog;
 import android.util.SparseBooleanArray;
@@ -46,6 +47,7 @@ public class CourseFragmentPage extends ListFragment {
 
     //courses entered by user stored here, this should change to appropriate type when we want to use
     // the course code
+    private FragmentActivity activity;
     private ArrayList<String> list = new ArrayList<String>();
     ArrayList<String> courses;
     ArrayList<String> courseNames;
@@ -60,6 +62,7 @@ public class CourseFragmentPage extends ListFragment {
     private FirebaseAuth authenticator= FirebaseAuth.getInstance();
     private FirebaseUser currUser = authenticator.getCurrentUser();
     private ArrayAdapter<String> courseAdapter;
+    private ListView courseListView;
 
     //override create view to initialize listeners and database information
     @Nullable
@@ -70,13 +73,9 @@ public class CourseFragmentPage extends ListFragment {
 
         View v = inflater.inflate(R.layout.courses_fragment_page, container, false);
         getDatabaseInfo();
+        initializeComponents();
         setListView();
         setListeners(v);
-
-
-        adapter = new ArrayAdapter<String>(getActivity().getApplicationContext()
-                ,android.R.layout.simple_list_item_multiple_choice,list);   //used to set courses to ListView
-
         setListAdapter(adapter);
 
         return v;
@@ -90,6 +89,13 @@ public class CourseFragmentPage extends ListFragment {
         getActivity().setTitle("My Courses");
 
     }//on ViewCreated
+
+    private void initializeComponents(){
+        activity = getActivity();
+        adapter = new ArrayAdapter<String>(getActivity().getApplicationContext()
+                ,android.R.layout.simple_list_item_multiple_choice,list);   //used to set courses to ListView
+
+    }
 
     /*
     * Set button listeners and add constraints for the user in case they have entered the wrong
@@ -178,9 +184,9 @@ public class CourseFragmentPage extends ListFragment {
         table_user.child(UID).child("enrolled").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                adapter = new ArrayAdapter<String>(getActivity().getApplicationContext(),android.R.layout.simple_list_item_multiple_choice,list);   //used to set courses to ListView
+
                 String[] values = new String[(int)dataSnapshot.getChildrenCount()];
-                ListView listview = (ListView)getActivity().findViewById(android.R.id.list);
+                courseListView = (ListView)activity.findViewById(android.R.id.list);
                 int pos=0;
                 //for each datasnap shot get information and add to the adapter
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
@@ -192,7 +198,7 @@ public class CourseFragmentPage extends ListFragment {
                 }
                 adapter.clear();
                 adapter.addAll(values);
-                listview.setAdapter(adapter);
+                courseListView.setAdapter(adapter);
             }
 
             @Override

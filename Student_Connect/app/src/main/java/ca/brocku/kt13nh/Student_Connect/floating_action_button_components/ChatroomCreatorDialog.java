@@ -49,10 +49,10 @@ public class ChatroomCreatorDialog extends Dialog {
 
     /**
      * Constructor for this Dialog that inherits from java's Dialog class
+     *
      * @param context
      */
-    public ChatroomCreatorDialog(final Context context)
-    {
+    public ChatroomCreatorDialog(final Context context) {
         super(context);
         // This is the layout XML file that describes your Dialog layout
         this.setContentView(R.layout.activity_chatroom_creator);
@@ -79,7 +79,7 @@ public class ChatroomCreatorDialog extends Dialog {
 
         List<String> userDisplayList = new ArrayList<>();
         usersAdapter = new ArrayAdapter<String>
-                (context,android.R.layout.simple_list_item_1,userDisplayList);
+                (context, android.R.layout.simple_list_item_1, userDisplayList);
         autoCompleteView.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
         autoCompleteView.setThreshold(1);
         autoCompleteView.setAdapter(usersAdapter);
@@ -97,11 +97,11 @@ public class ChatroomCreatorDialog extends Dialog {
     private void addListeners() {
         final EditText chatName = (EditText) findViewById(R.id.enterTitle);
         final MultiAutoCompleteTextView usersToAdd = (MultiAutoCompleteTextView)
-                                                            findViewById(R.id.enterUsers);
-        Button cancelButton = (Button) findViewById (R.id.cancelButton);
+                findViewById(R.id.enterUsers);
+        Button cancelButton = (Button) findViewById(R.id.cancelButton);
         Button createChatButton = (Button) findViewById(R.id.postButton);
 
-        cancelButton.setOnClickListener(new View.OnClickListener(){
+        cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dismiss();
@@ -112,7 +112,7 @@ public class ChatroomCreatorDialog extends Dialog {
             public void onClick(View v) {
                 //Adds new chatroom to chatrooms table
                 String usersToAddString = usersToAdd.getText().toString();
-                if(!chatName.getText().toString().equals("")) {
+                if (!chatName.getText().toString().equals("")) {
                     if (usersToAddString.equals("") || usersToAddString.matches(
                             "(([a-zA-Z]+[\\s][a-zA-Z]+[\\s]*\\(" +
                                     "[a-z][a-z][0-9][0-9][a-z][a-z]@brocku.ca\\))+,*\\s*)+")) {
@@ -153,17 +153,17 @@ public class ChatroomCreatorDialog extends Dialog {
                                             userIsInTable = true;
                                         }
                                     }
-                                    if(!userIsInTable){
+                                    if (!userIsInTable) {
                                         usersExistInTable = false;
                                     }
                                 }
                             }
 
                             //If some of the users entered are not in db, user is notified
-                            if(!usersExistInTable) {
+                            if (!usersExistInTable) {
                                 Toast.makeText(getContext(),
                                         "Some of the users you have entered does not exist",
-                                                Toast.LENGTH_SHORT).show();
+                                        Toast.LENGTH_SHORT).show();
 
                             }
 
@@ -176,11 +176,10 @@ public class ChatroomCreatorDialog extends Dialog {
                                         "ie. FirstName LastName (aa11bb@brocku.ca), ...",
                                 Toast.LENGTH_LONG).show();
                     }
-                }
-                else{
+                } else {
                     Toast.makeText(getContext(),
                             "Chatroom names must be between 1-16 characters",
-                                     Toast.LENGTH_LONG).show();
+                            Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -190,7 +189,7 @@ public class ChatroomCreatorDialog extends Dialog {
      * Attaches listener to user table in DB that simply constructs a list of users to be used later
      * Also adds users to adapter to be displayed in autocomplete view
      */
-    private void attachDatabaseListener(){
+    private void attachDatabaseListener() {
         mUsersReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {

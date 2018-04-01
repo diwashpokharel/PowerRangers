@@ -281,7 +281,12 @@ public class Chatroom extends AppCompatActivity {
                                 Toast.LENGTH_SHORT).show();
                         String userToReportFirstName = userToReport.split(" ")[0];
                         String userToReportLastName = userToReport.split(" ")[1];
-
+                        DatabaseReference userToReportRef = mDatabaseReference.child("User")
+                                                                .orderByChild("email")
+                                                                .equalTo("kt13nh@brocku.ca")
+                                                                .getRef();
+                        //String userToReportUID = userToReportRef.getKey();
+                        int i = 0;
                     }
                 }
 

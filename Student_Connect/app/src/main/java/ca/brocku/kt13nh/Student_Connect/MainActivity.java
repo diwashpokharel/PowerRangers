@@ -2,7 +2,6 @@ package ca.brocku.kt13nh.Student_Connect;
 
 import android.support.v7.app.AppCompatActivity;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -10,14 +9,8 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
-import ca.brocku.kt13nh.Student_Connect.base_interface_java_v3.Home;
-import ca.brocku.kt13nh.Student_Connect.first_login_components.CourseRegisterPage;
 import ca.brocku.kt13nh.Student_Connect.login_reg_java_v2.activity_login;
 import ca.brocku.kt13nh.Student_Connect.login_reg_java_v2.activity_register;
 import ca.brocku.kt13nh.Student_Connect.base_interface_java_v3.NavBar;
@@ -33,10 +26,9 @@ public class MainActivity extends AppCompatActivity {
     private Button registerButton;
     private Button existingUserButton;
     //firebase instances
-    final FirebaseDatabase database = FirebaseDatabase.getInstance();
     private FirebaseAuth authenticator = FirebaseAuth.getInstance();
     private FirebaseUser currUser = authenticator.getCurrentUser();
-    String test;
+
     /*
     *
     * Start the user on the login/registration page.
@@ -51,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
         checkFirstLogin();
     }
     @Override
@@ -67,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
             startActivity(activity_home);
         }
     }
+
+
 
 
     /*
@@ -112,7 +105,8 @@ public class MainActivity extends AppCompatActivity {
     public boolean isLoggedIn(){
 
         if(currUser!=null){
-            Toast.makeText(MainActivity.this,currUser.getEmail().toString(),Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.this,currUser.getEmail().toString(),
+                    Toast.LENGTH_LONG).show();
             return true;
         }
         else{

@@ -3,6 +3,7 @@ package ca.brocku.kt13nh.Student_Connect.drawer_components;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.ListFragment;
 import android.support.v7.app.AlertDialog;
 import android.util.SparseBooleanArray;
@@ -44,6 +45,7 @@ import ca.brocku.kt13nh.Student_Connect.first_login_components.CourseRegisterPag
 
 public class HobbiesFragmentPage extends ListFragment {
 
+    private FragmentActivity activity;
     private ArrayAdapter<String> adapter;
     private ArrayList<String> hobbies;
     private ArrayList<String> user_hobbies;
@@ -57,6 +59,7 @@ public class HobbiesFragmentPage extends ListFragment {
     private FirebaseAuth authenticator= FirebaseAuth.getInstance();
     private FirebaseUser currUser = authenticator.getCurrentUser();
     private ArrayAdapter<String> hobbyAdapter;
+    private ListView hobbyListView;
 
     /*
     * Create the view and initialize database information. Set button listeners with view param
@@ -67,11 +70,10 @@ public class HobbiesFragmentPage extends ListFragment {
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container,@Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.hobbies_fragment_page, container, false);
-
         getDatabaseInfo();
         setButtonListeners(v);
+        initializeComponents();
         setListView();
-
         setListAdapter(adapter);
 
         return v;
@@ -86,6 +88,13 @@ public class HobbiesFragmentPage extends ListFragment {
 
 
     }//on ViewCreated
+
+    private void initializeComponents(){
+        activity = getActivity();
+        adapter = new ArrayAdapter<String>(activity.getApplicationContext(),
+                android.R.layout.simple_list_item_multiple_choice,list);   //used to set courses to ListView
+
+    }
 
     //initialize button listeners
     private void setButtonListeners(View v){
@@ -170,9 +179,9 @@ public class HobbiesFragmentPage extends ListFragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 //set the adapter with hobby data and populate listview with the adapter
-                adapter = new ArrayAdapter<String>(getActivity().getApplicationContext(),android.R.layout.simple_list_item_multiple_choice,list);   //used to set courses to ListView
                 String[] values = new String[(int)dataSnapshot.getChildrenCount()];
-                ListView listview = (ListView)getActivity().findViewById(android.R.id.list);
+                hobbyListView = (ListView)activity.findViewById(android.R.id.list);
+
                 int pos=0;
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                     String name = snapshot.getKey().toString();
@@ -182,7 +191,7 @@ public class HobbiesFragmentPage extends ListFragment {
                 }
                 adapter.clear();
                 adapter.addAll(values);
-                listview.setAdapter(adapter);
+                hobbyListView.setAdapter(adapter);
             }
 
             @Override
@@ -206,11 +215,13 @@ public class HobbiesFragmentPage extends ListFragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 edit = (AutoCompleteTextView) getActivity().findViewById(R.id.hobbyEditItem);
+
                 hobbies = new ArrayList<String>();
                 setHobbies();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     hobbies.add(snapshot.getKey().toString().toLowerCase());
                 }
+
                 hobbyAdapter = new ArrayAdapter<String>
                         (HobbiesFragmentPage.this.getActivity(),android.R.layout.simple_list_item_1,hobbies);
                 hobbyAdapter.addAll(hobbies);
