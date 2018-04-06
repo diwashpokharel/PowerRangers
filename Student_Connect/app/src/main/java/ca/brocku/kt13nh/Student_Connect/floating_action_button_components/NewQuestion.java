@@ -1,7 +1,11 @@
 package ca.brocku.kt13nh.Student_Connect.floating_action_button_components;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.OpenableColumns;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -10,8 +14,10 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -19,7 +25,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -28,6 +38,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import ca.brocku.kt13nh.Student_Connect.R;
+import ca.brocku.kt13nh.Student_Connect.chatroom_components.Message;
 
 /**
  * This class used for when a user wants to post a new question.
@@ -37,14 +48,19 @@ import ca.brocku.kt13nh.Student_Connect.R;
  */
 public class NewQuestion extends Activity{
 
+    private static final int RC_PHOTO_PICKER =  2;
+
     private Spinner spinnerCourses;
     private EditText editTitleField, editDescriptionField;
     private CheckBox anonymousCheckbox;
+
+    private Uri imageUri;
     private FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
     private DatabaseReference table_questions = mFirebaseDatabase.getReference().child("Questions");
     private DatabaseReference table_user = mFirebaseDatabase.getReference().child("User");
     private FirebaseAuth authenticator= FirebaseAuth.getInstance();
     private FirebaseUser currUser = authenticator.getCurrentUser();
+    private StorageReference imageRef;
 
     @Override
     protected  void onCreate(Bundle savedInstanceState){
@@ -95,9 +111,7 @@ public class NewQuestion extends Activity{
         postButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(NewQuestion.this, "Post button pressed :" +
-                                "\nCourse selected: " + String.valueOf(spinnerCourses.getSelectedItem()),
-                        Toast.LENGTH_SHORT).show();
+
                 //information stored after user clicks POST
 
                 //convert values from form to string
@@ -133,6 +147,18 @@ public class NewQuestion extends Activity{
                         else
                             questionData.put("anonymous","false");
 
+                        if(imageRef != null){
+                            //Upload file to Firebase storage
+                            imageRef.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                    Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                                    questionData.put("imageUrl", downloadUrl.toString());
+                                }
+                            });
+
+                        }
+
                         table_questions.child(questionID).setValue(questionData);
                         table_user.child(UID).child("qa").child(questionID).setValue(questionTitle);
                         Toast.makeText(NewQuestion.this, "Question created!", Toast.LENGTH_SHORT).show();
@@ -150,6 +176,14 @@ public class NewQuestion extends Activity{
         });
 
     }//addListenerOnButton
+
+    public void uploadImage(View view){
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/jpeg");
+        intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+        startActivityForResult(Intent.createChooser(intent, "Complete action using"),
+                RC_PHOTO_PICKER);
+    }
 
     /**
      * Adds listener to enrolled section in User's table that gets the courses the current user is
@@ -178,6 +212,45 @@ public class NewQuestion extends Activity{
             public void onCancelled(DatabaseError databaseError) {
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == RC_PHOTO_PICKER){
+            if(resultCode == RESULT_OK){
+                imageUri = data.getData();
+                //Get a reference to store file at Images/<FILENAME>
+                imageRef = FirebaseStorage.getInstance().getReference()
+                        .child("Images").child(imageUri.getLastPathSegment());
+
+                String uriString = imageUri.toString();
+
+                File myFile = new File(uriString);
+                String displayName = null;
+
+                //Find the name of the file selected by the user
+                if (uriString.startsWith("content://")) {
+                    Cursor cursor = null;
+                    try {
+                        cursor = this.getContentResolver().query(imageUri, null,
+                                null, null,
+                                null);
+                        if (cursor != null && cursor.moveToFirst()) {
+                            displayName = cursor.getString(cursor.getColumnIndex
+                                    (OpenableColumns.DISPLAY_NAME));
+                        }
+                    } finally {
+                        cursor.close();
+                    }
+                } else if (uriString.startsWith("file://")) {
+                    displayName = myFile.getName();
+                }
+
+                TextView imageNameView = findViewById(R.id.imageNameTextView);
+                imageNameView.setText(displayName);
+            }
+        }
     }
 
 }//PopUpAdd

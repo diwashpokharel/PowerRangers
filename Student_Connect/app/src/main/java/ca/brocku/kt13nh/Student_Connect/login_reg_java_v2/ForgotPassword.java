@@ -28,7 +28,7 @@ public class ForgotPassword extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_forgotpassword);
-
+        initForgotButton();
     }
 
     //initialize forgot password button
@@ -66,3 +66,4 @@ public class ForgotPassword extends AppCompatActivity {
         });
     }
 }
+

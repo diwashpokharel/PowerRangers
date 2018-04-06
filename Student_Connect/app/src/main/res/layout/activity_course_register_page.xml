@@ -69,7 +69,46 @@
             android:background="@color/black"
             android:layout_marginTop="8dp"/>
 
-        <com.rengwuxian.materialedittext.MaterialEditText
+        <!--<com.rengwuxian.materialedittext.MaterialEditText-->
+            <!--android:id="@+id/editCourse1"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="center_vertical"-->
+            <!--android:layout_weight="1"-->
+            <!--android:gravity="center_vertical"-->
+            <!--android:hint="1) Enter course code (optional)"-->
+            <!--android:inputType="textCapCharacters"-->
+            <!--android:textColor="@android:color/black"-->
+            <!--android:textColorHint="@android:color/black"-->
+            <!--android:textSize="16sp"-->
+            <!--android:maxLength="8"-->
+            <!--android:textAllCaps="true"-->
+            <!--app:met_baseColor="@android:color/black"-->
+            <!--app:met_floatingLabel="highlight"-->
+            <!--app:met_primaryColor="@android:color/black"-->
+            <!--app:met_singleLineEllipsis="true" />-->
+        <!---->
+
+        <!--<com.rengwuxian.materialedittext.MaterialEditText-->
+            <!--android:id="@+id/editCourse2"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="center_vertical"-->
+            <!--android:layout_weight="1"-->
+            <!--android:gravity="center_vertical"-->
+            <!--android:hint="2) Enter course code (optional)"-->
+            <!--android:inputType="textCapCharacters"-->
+            <!--android:textColor="@android:color/black"-->
+            <!--android:textColorHint="@android:color/black"-->
+            <!--android:textSize="16sp"-->
+            <!--android:maxLength="8"-->
+            <!--android:textAllCaps="true"-->
+            <!--app:met_baseColor="@android:color/black"-->
+            <!--app:met_floatingLabel="highlight"-->
+            <!--app:met_primaryColor="@android:color/black"-->
+            <!--app:met_singleLineEllipsis="true" />-->
+
+        <AutoCompleteTextView
             android:id="@+id/editCourse1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -79,16 +118,11 @@
             android:hint="1) Enter course code (optional)"
             android:inputType="textCapCharacters"
             android:textColor="@android:color/black"
-            android:textColorHint="@android:color/black"
+            android:textColorHint="@android:color/darker_gray"
             android:textSize="16sp"
             android:maxLength="8"
-            android:textAllCaps="true"
-            app:met_baseColor="@android:color/black"
-            app:met_floatingLabel="highlight"
-            app:met_primaryColor="@android:color/black"
-            app:met_singleLineEllipsis="true" />
-
-        <com.rengwuxian.materialedittext.MaterialEditText
+            android:textAllCaps="true" />
+        <AutoCompleteTextView
             android:id="@+id/editCourse2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -98,16 +132,11 @@
             android:hint="2) Enter course code (optional)"
             android:inputType="textCapCharacters"
             android:textColor="@android:color/black"
-            android:textColorHint="@android:color/black"
+            android:textColorHint="@android:color/darker_gray"
             android:textSize="16sp"
             android:maxLength="8"
-            android:textAllCaps="true"
-            app:met_baseColor="@android:color/black"
-            app:met_floatingLabel="highlight"
-            app:met_primaryColor="@android:color/black"
-            app:met_singleLineEllipsis="true" />
-
-        <com.rengwuxian.materialedittext.MaterialEditText
+            android:textAllCaps="true" />
+        <AutoCompleteTextView
             android:id="@+id/editCourse3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -117,16 +146,11 @@
             android:hint="3) Enter course code (optional)"
             android:inputType="textCapCharacters"
             android:textColor="@android:color/black"
-            android:textColorHint="@android:color/black"
+            android:textColorHint="@android:color/darker_gray"
             android:textSize="16sp"
             android:maxLength="8"
-            android:textAllCaps="true"
-            app:met_baseColor="@android:color/black"
-            app:met_floatingLabel="highlight"
-            app:met_primaryColor="@android:color/black"
-            app:met_singleLineEllipsis="true" />
-
-        <com.rengwuxian.materialedittext.MaterialEditText
+            android:textAllCaps="true" />
+        <AutoCompleteTextView
             android:id="@+id/editCourse4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -136,16 +160,11 @@
             android:hint="4) Enter course code (optional)"
             android:inputType="textCapCharacters"
             android:textColor="@android:color/black"
-            android:textColorHint="@android:color/black"
+            android:textColorHint="@android:color/darker_gray"
             android:textSize="16sp"
             android:maxLength="8"
-            android:textAllCaps="true"
-            app:met_baseColor="@android:color/black"
-            app:met_floatingLabel="highlight"
-            app:met_primaryColor="@android:color/black"
-            app:met_singleLineEllipsis="true" />
-
-        <com.rengwuxian.materialedittext.MaterialEditText
+            android:textAllCaps="true" />
+        <AutoCompleteTextView
             android:id="@+id/editCourse5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -155,16 +174,11 @@
             android:hint="5) Enter course code (optional)"
             android:inputType="textCapCharacters"
             android:textColor="@android:color/black"
-            android:textColorHint="@android:color/black"
+            android:textColorHint="@android:color/darker_gray"
             android:textSize="16sp"
             android:maxLength="8"
-            android:textAllCaps="true"
-            app:met_baseColor="@android:color/black"
-            app:met_floatingLabel="highlight"
-            app:met_primaryColor="@android:color/black"
-            app:met_singleLineEllipsis="true" />
-
-        <com.rengwuxian.materialedittext.MaterialEditText
+            android:textAllCaps="true" />
+        <AutoCompleteTextView
             android:id="@+id/editCourse6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -174,14 +188,86 @@
             android:hint="6) Enter course code (optional)"
             android:inputType="textCapCharacters"
             android:textColor="@android:color/black"
-            android:textColorHint="@android:color/black"
+            android:textColorHint="@android:color/darker_gray"
             android:textSize="16sp"
             android:maxLength="8"
-            android:textAllCaps="true"
-            app:met_baseColor="@android:color/black"
-            app:met_floatingLabel="highlight"
-            app:met_primaryColor="@android:color/black"
-            app:met_singleLineEllipsis="true" />
+            android:textAllCaps="true" />
+
+        <!--<com.rengwuxian.materialedittext.MaterialEditText-->
+            <!--android:id="@+id/editCourse3"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="center_vertical"-->
+            <!--android:layout_weight="1"-->
+            <!--android:gravity="center_vertical"-->
+            <!--android:hint="3) Enter course code (optional)"-->
+            <!--android:inputType="textCapCharacters"-->
+            <!--android:textColor="@android:color/black"-->
+            <!--android:textColorHint="@android:color/black"-->
+            <!--android:textSize="16sp"-->
+            <!--android:maxLength="8"-->
+            <!--android:textAllCaps="true"-->
+            <!--app:met_baseColor="@android:color/black"-->
+            <!--app:met_floatingLabel="highlight"-->
+            <!--app:met_primaryColor="@android:color/black"-->
+            <!--app:met_singleLineEllipsis="true" />-->
+
+        <!--<com.rengwuxian.materialedittext.MaterialEditText-->
+            <!--android:id="@+id/editCourse4"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="center_vertical"-->
+            <!--android:layout_weight="1"-->
+            <!--android:gravity="center_vertical"-->
+            <!--android:hint="4) Enter course code (optional)"-->
+            <!--android:inputType="textCapCharacters"-->
+            <!--android:textColor="@android:color/black"-->
+            <!--android:textColorHint="@android:color/black"-->
+            <!--android:textSize="16sp"-->
+            <!--android:maxLength="8"-->
+            <!--android:textAllCaps="true"-->
+            <!--app:met_baseColor="@android:color/black"-->
+            <!--app:met_floatingLabel="highlight"-->
+            <!--app:met_primaryColor="@android:color/black"-->
+            <!--app:met_singleLineEllipsis="true" />-->
+
+        <!--<com.rengwuxian.materialedittext.MaterialEditText-->
+            <!--android:id="@+id/editCourse5"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="center_vertical"-->
+            <!--android:layout_weight="1"-->
+            <!--android:gravity="center_vertical"-->
+            <!--android:hint="5) Enter course code (optional)"-->
+            <!--android:inputType="textCapCharacters"-->
+            <!--android:textColor="@android:color/black"-->
+            <!--android:textColorHint="@android:color/black"-->
+            <!--android:textSize="16sp"-->
+            <!--android:maxLength="8"-->
+            <!--android:textAllCaps="true"-->
+            <!--app:met_baseColor="@android:color/black"-->
+            <!--app:met_floatingLabel="highlight"-->
+            <!--app:met_primaryColor="@android:color/black"-->
+            <!--app:met_singleLineEllipsis="true" />-->
+
+        <!--<com.rengwuxian.materialedittext.MaterialEditText-->
+            <!--android:id="@+id/editCourse6"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="center_vertical"-->
+            <!--android:layout_weight="1"-->
+            <!--android:gravity="center_vertical"-->
+            <!--android:hint="6) Enter course code (optional)"-->
+            <!--android:inputType="textCapCharacters"-->
+            <!--android:textColor="@android:color/black"-->
+            <!--android:textColorHint="@android:color/black"-->
+            <!--android:textSize="16sp"-->
+            <!--android:maxLength="8"-->
+            <!--android:textAllCaps="true"-->
+            <!--app:met_baseColor="@android:color/black"-->
+            <!--app:met_floatingLabel="highlight"-->
+            <!--app:met_primaryColor="@android:color/black"-->
+            <!--app:met_singleLineEllipsis="true" />-->
 
         <LinearLayout
             android:layout_width="match_parent"

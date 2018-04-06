@@ -123,8 +123,8 @@ public class HobbiesFragmentPage extends ListFragment {
                 }
                 //otherwise not in the database
                 else{
-                    Toast.makeText(v.getContext(),"Hobby is not currently in our database," +
-                            " feel free to create a chat with your friends!",Toast.LENGTH_LONG).show();
+                    Toast.makeText(v.getContext(),"Hobby is not currently in our database." +
+                            " Contact Student Connect support if you want this hobby added.",Toast.LENGTH_LONG).show();
                 }
             }
         };
@@ -211,20 +211,20 @@ public class HobbiesFragmentPage extends ListFragment {
     // comparing purposes and autocomplete
     // */
     private void getDatabaseInfo(){
+        setHobbies();
+
         table_hobbies.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 edit = (AutoCompleteTextView) getActivity().findViewById(R.id.hobbyEditItem);
 
                 hobbies = new ArrayList<String>();
-                setHobbies();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     hobbies.add(snapshot.getKey().toString().toLowerCase());
                 }
 
                 hobbyAdapter = new ArrayAdapter<String>
                         (HobbiesFragmentPage.this.getActivity(),android.R.layout.simple_list_item_1,hobbies);
-                hobbyAdapter.addAll(hobbies);
                 edit.setAdapter(hobbyAdapter);
             }
             @Override

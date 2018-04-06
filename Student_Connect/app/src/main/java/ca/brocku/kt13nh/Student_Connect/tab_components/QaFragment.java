@@ -78,21 +78,23 @@ public class QaFragment extends Fragment {
 
     //read from data base and set the enrolled courses into the array list, and display
     private void setEnrolled(){
-        table_user_enrolled.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    enrolled.add(snapshot.getKey());
+        if(table_user_enrolled != null) {
+            table_user_enrolled.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        enrolled.add(snapshot.getKey());
+                    }
+                    setRecyclerView();
+                    attachDatabaseReadListener();
                 }
-                setRecyclerView();
-                attachDatabaseReadListener();
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
+                }
+            });
+        }
     }
 
     //Setting recycler view
@@ -124,6 +126,11 @@ public class QaFragment extends Fragment {
                     String askedBy = (String) dataSnapshot.child("user").getValue().toString();
                     String time = (String) dataSnapshot.child("date").getValue().toString();
                     String anonymous = (String) dataSnapshot.child("anonymous").getValue().toString();
+                    String imageUrl = "";
+                    Object imageUrlObject = dataSnapshot.child("imageUrl").getValue();
+                    if(imageUrlObject != null)
+                        imageUrl = imageUrlObject.toString();
+
                     String UID = currUser.getUid();
 
                     Map<String, String> questionData = new HashMap<>();
@@ -137,9 +144,8 @@ public class QaFragment extends Fragment {
                     else
                         questionData.put("askedBy",askedBy);
                     questionData.put("time", time);
+                    questionData.put("imageUrl", imageUrl);
 
-                    System.out.println(enrolled.size());
-                    System.out.println("course: "+course+" "+enrolled.contains(course));
                     if(enrolled.contains(course)) {
                         qaAdapter.addQuestion(questionData);
                         recyclerView.setAdapter(qaAdapter);

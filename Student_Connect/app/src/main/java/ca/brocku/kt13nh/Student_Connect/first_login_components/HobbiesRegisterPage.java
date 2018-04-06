@@ -92,6 +92,7 @@ public class HobbiesRegisterPage extends AppCompatActivity {
         final CheckBox checkPoetry = (CheckBox)findViewById(R.id.otherCheckPoetry);
         final CheckBox checkPiano = (CheckBox)findViewById(R.id.otherCheckPiano);
         final CheckBox checkReading = (CheckBox)findViewById(R.id.otherCheckReading);
+        final CheckBox checkOther = (CheckBox)findViewById(R.id.otherCheckOther);
 
 
         //Button listener on Previous button
@@ -137,6 +138,7 @@ public class HobbiesRegisterPage extends AppCompatActivity {
                 boolean poetry = checkPoetry.isChecked();
                 boolean piano = checkPiano.isChecked();
                 boolean reading = checkReading.isChecked();
+                boolean other = checkOther.isChecked();
                 //check to see if any of these are checked. if checked then add to the list
                 if(acting)
                     list.add(checkActing.getText().toString());
@@ -188,6 +190,8 @@ public class HobbiesRegisterPage extends AppCompatActivity {
                     list.add(checkPiano.getText().toString());
                 if(reading)
                     list.add(checkReading.getText().toString());
+                if(other)
+                    list.add(checkOther.getText().toString());
                 writeDBInformation();
             }
         });
@@ -198,16 +202,29 @@ public class HobbiesRegisterPage extends AppCompatActivity {
     * the checkboxes are checked
     * */
     private void writeDBInformation(){
-        final String c1 = getIntent().getStringExtra("course1");
-        final String c2 = getIntent().getStringExtra("course2");
-        final String c3 = getIntent().getStringExtra("course3");
-        final String c4 = getIntent().getStringExtra("course4");
-        final String c5 = getIntent().getStringExtra("course5");
-        final String c6 = getIntent().getStringExtra("course6");
+        String c1 = getIntent().getStringExtra("course1");
+        String c2 = getIntent().getStringExtra("course2");
+        String c3 = getIntent().getStringExtra("course3");
+        String c4 = getIntent().getStringExtra("course4");
+        String c5 = getIntent().getStringExtra("course5");
+        String c6 = getIntent().getStringExtra("course6");
+        String c1Name = getIntent().getStringExtra("course1Name");
+        String c2Name = getIntent().getStringExtra("course2Name");
+        String c3Name = getIntent().getStringExtra("course3Name");
+        String c4Name = getIntent().getStringExtra("course4Name");
+        String c5Name = getIntent().getStringExtra("course5Name");
+        String c6Name = getIntent().getStringExtra("course6Name");
         //write all of the hobbies into the user's table.
         for(int i=0;i<list.size();i++){
             table_user_hobbies.child(list.get(i).toString()).setValue("");
         }
+
+        if(c1 != null) table_user.child(currUser.getUid()).child("enrolled").child(c1).setValue(c1Name);
+        if(c2 != null) table_user.child(currUser.getUid()).child("enrolled").child(c2).setValue(c2Name);
+        if(c3 != null) table_user.child(currUser.getUid()).child("enrolled").child(c3).setValue(c3Name);
+        if(c4 != null) table_user.child(currUser.getUid()).child("enrolled").child(c4).setValue(c4Name);
+        if(c5 != null) table_user.child(currUser.getUid()).child("enrolled").child(c5).setValue(c5Name);
+        if(c6 != null) table_user.child(currUser.getUid()).child("enrolled").child(c6).setValue(c6Name);
 
         table_user.child(currUser.getUid()).child("first_login").setValue("false");
         Intent activity_home = new Intent(HobbiesRegisterPage.this, NavBar.class);

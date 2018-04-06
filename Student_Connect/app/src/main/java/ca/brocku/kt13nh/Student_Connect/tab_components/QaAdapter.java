@@ -94,6 +94,7 @@ public class QaAdapter extends
                 qaIntent.putExtra("description", question.get("description"));
                 qaIntent.putExtra("askedBy", question.get("askedBy"));
                 qaIntent.putExtra("time", question.get("time"));
+                qaIntent.putExtra("imageUrl", question.get("imageUrl"));
                 context.startActivity(qaIntent);
             }
 

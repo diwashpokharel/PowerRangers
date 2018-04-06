@@ -69,8 +69,6 @@ public class CourseFragmentPage extends ListFragment {
     @Override
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container,@Nullable Bundle savedInstanceState) {
-
-
         View v = inflater.inflate(R.layout.courses_fragment_page, container, false);
         getDatabaseInfo();
         initializeComponents();
@@ -84,7 +82,6 @@ public class CourseFragmentPage extends ListFragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-
         super.onViewCreated(view, savedInstanceState);
         getActivity().setTitle("My Courses");
 
@@ -212,6 +209,7 @@ public class CourseFragmentPage extends ListFragment {
     * update auto complete for the user in realtime.
     * */
     private void getDatabaseInfo(){
+        initUserCoursesInfo();
 
         table_courses.addValueEventListener(new ValueEventListener() {
             @Override
@@ -222,14 +220,11 @@ public class CourseFragmentPage extends ListFragment {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     courses.add(snapshot.getKey().toString());
                     courseNames.add(snapshot.child("CourseName").getValue().toString());
-                    System.out.println("noooooooooooooo"+snapshot.getValue().toString());
                 }
                 //set the adapter for the components within the adapters
                 courseAdapter = new ArrayAdapter<String>
                         (CourseFragmentPage.this.getActivity(),android.R.layout.simple_list_item_1,courses);
-                courseAdapter.addAll(courses);
                 edit.setAdapter(courseAdapter);
-                initUserCoursesInfo();
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {

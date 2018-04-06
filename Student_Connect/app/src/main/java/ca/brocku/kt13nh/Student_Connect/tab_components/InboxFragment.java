@@ -134,7 +134,7 @@ public class InboxFragment extends Fragment {
                 Map<String, String> enrolledMapping = new HashMap<>();
 
                 //Gets all enrolled courses, events joined, hobbies added and private chats joined for
-                //this user from the DB
+                //this user from the DB.
                 if(dataSnapshot.child("enrolled").getValue() != null &&
                         !dataSnapshot.child("enrolled").getValue().toString().equals(""))
                     enrolledMapping= (Map<String, String>) dataSnapshot.child("enrolled").getValue();

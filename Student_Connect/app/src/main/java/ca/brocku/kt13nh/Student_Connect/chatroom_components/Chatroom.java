@@ -396,7 +396,7 @@ public class Chatroom extends AppCompatActivity {
                 StorageReference fileRef = mFilesStorageReference.child(
                         selectedFileUri.getLastPathSegment());
 
-                final String uploadedBy = displayName;
+                final String uploadedBy = this.displayName;
                 //Add message object containing the user, name of the selected file, and the url to
                 // its location in Firebase Storage to the database
                 fileRef.putFile(selectedFileUri).addOnSuccessListener(this,

@@ -133,6 +133,8 @@ public class ChatroomCreatorDialog extends Dialog {
                                 (Object) (chatName.getText().toString()));
                         currentUserReference.child("private_chats").updateChildren(privateChatInfo);
 
+                        Toast.makeText(getContext(), "Chatroom Created!", Toast.LENGTH_SHORT).show();
+
                         //Adds the private chat reference to the private chat list of all the users that
                         //were invited to the chat
                         if (!usersToAdd.getText().toString().equals("")) {
